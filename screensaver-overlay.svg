@@ -4,6 +4,7 @@
 <svg
    width="1080"
    height="720"
+   preserveAspectRatio="none"
    viewBox="0 0 285.75001 190.5"
    version="1.1"
    id="svg1"
@@ -72,7 +73,7 @@
      transform="translate(64.293747,-53.181252)"><g
        id="g12"
        transform="matrix(0.99620687,0,0,1,-5.3008065,398.94167)"><rect
-         style="opacity:0.461351;fill:url(#radialGradient9);fill-opacity:1;stroke:none;stroke-width:17.5274"
+         style="opacity:1;fill:url(#radialGradient9);fill-opacity:1;stroke:none;stroke-width:17.5274"
          id="rect8"
          width="286.83801"
          height="190.5"

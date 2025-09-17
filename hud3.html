@@ -37,6 +37,27 @@
       position: absolute;
       filter: url(#tint);
     }
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      opacity: 46.1351%;
+      z-index: 999;
+      pointer-events: none;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    #mockup {
+      position: fixed;
+      top: 0;
+      left:auto;
+      width: auto;
+      height: 100vh;
+      opacity: 1;
+      z-index: -999;
+      filter: url(#tint);
+    }
   </style>
 </head>
 <body>
@@ -52,6 +73,9 @@
   <p id="testtext">Profile 58%</p>
   <img id="worldmap" src="world_map.svg" alt="World Map">
   <img id="ring" src="screensaver-ring.svg" alt="Ring">
+  <img id="overlay" src="screensaver-overlay.svg" alt="Overlay">
+
+  <img id="mockup" src="screensaver-mockup.png" alt="Mockup">
 
   <script>
     function hexToRgb(hex) {
