@@ -34,6 +34,7 @@
       text-transform: uppercase;
       font-size: 48px;
       margin: 0;
+      filter: drop-shadow(0 0 4px #3bffdacc);
     }
     #ring {
       /*TODO: Should parent to #mainframe*/
@@ -44,7 +45,7 @@
       width: 564.8px;
       height: 564.8px;
       transform-origin: center;
-      filter: url(#tint);
+      filter: url(#tint) drop-shadow(0 0 4px #3bffdacc);
     }
     #worldmap {
       /* TODO migrate to grid */
@@ -53,7 +54,7 @@
       width: 260px;
       height: 162px;
       position: absolute;
-      filter: url(#tint);
+      filter: url(#tint) drop-shadow(0 0 4px #3bffdacc);
     }
     #bl-graph {
         position: absolute;
@@ -62,12 +63,33 @@
         width: 254px;
         height: 178px;
     }
+    #bcl-graph {
+        position: absolute;
+        left: 308px;
+        bottom: 24px;
+        width: 140px;
+        height: 85px;
+    }
+    #bcr-graph {
+        position: absolute;
+        right: 308px;
+        bottom: 24px;
+        width: 100px;
+        height: 85px;
+    }
     #br-graph {
         position: absolute;
         right: 24px;
         bottom: 80px;
         width: 242px;
         height: 136px;
+    }
+    #r-progbar {
+        position: absolute;
+        right: 24px;
+        bottom: 242px;
+        width: 200px;
+        height: 100px;
     }
     #br-percentages {
       position: absolute;
@@ -77,8 +99,9 @@
       height: 24px;
       padding: 7px 24px;
       line-height: 24px;
-      background-color: #ff000066;
+      /*background-color: #ff000066;*/
       font-size: 24px;
+      filter: drop-shadow(0 0 4px #3bffdacc);
     }
     #trace-overlay {
       position: fixed;
@@ -88,6 +111,9 @@
       height: 100%;
       pointer-events: none; /* Crucial: Allows clicks to pass through */
       z-index: 9998; /* Just below #gradient-overlay */
+
+      /* TODO: Integrate this into the tint filter? */
+      filter: drop-shadow(0 0 4px #3bffdacc);
     }
     #gradient-overlay {
       position: fixed;
@@ -143,7 +169,10 @@
   <div id="mainframe">
     <div id="testtext">Profile 58%</div>
     <img id="worldmap" src="world_map.svg" alt="World Map">
+    <img id="r-progbar" src="graph5_placeholder.svg" alt="Graph5 Placeholder">
     <img id="bl-graph" src="graph2_placeholder.svg" alt="Graph2 Placeholder">
+    <img id="bcl-graph" src="graph3_placeholder.svg" alt="Graph3 Placeholder">
+    <img id="bcr-graph" src="graph4_placeholder.svg" alt="Graph4 Placeholder">
     <img id="br-graph" src="graph1_placeholder.svg" alt="Graph1 Placeholder">
     <div id=br-percentages>60%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20%</div>
   </div>
@@ -210,100 +239,20 @@
 
     requestAnimationFrame(animate);
   </script>
-  <script>
-/**
- * Adds an SVG border around a given HTML element with optional offset and chamfered corners.
- * @param {string} elementId - The ID of the element to draw the border around.
- * @param {object} options - An object containing configuration options.
- * @param {number} options.offset - The distance to offset the border from the element (can be negative).
- * @param {number} options.chamferSize - The size of the chamfered corner.
- * @param {string} options.color - The stroke color for the border.
- */
-function addBorderAround(elementId, options = {}) {
-    const { offset = 0, chamferSize = 0, color = 'blue' } = options;
 
-    const element = document.getElementById(elementId);
-    if (!element) {
-        console.error(`Element with ID "${elementId}" not found.`);
-        return;
-    }
+  <script type="module">
+  import { addBorder, clearAllBorders } from './borders.js';
 
-    const svg = document.getElementById('trace-overlay');
-    if (!svg) {
-        console.error('SVG overlay not found.');
-        return;
-    }
+  // Now you can call the functions imported from borders.js
+  clearAllBorders();
 
-    const rect = element.getBoundingClientRect();
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-
-    let pathData = '';
-
-    // Adjust coordinates for offset
-    const x1 = rect.left - offset;
-    const y1 = rect.top - offset;
-    const x2 = rect.right + offset;
-    const y2 = rect.bottom + offset;
-
-    // A simple check to ensure chamferSize doesn't exceed half of the shortest side
-    const maxChamfer = Math.min(rect.width, rect.height) / 2;
-    const effectiveChamfer = Math.min(chamferSize, maxChamfer);
-
-    // If chamferSize is 0, draw a simple rectangle
-    if (effectiveChamfer === 0) {
-        pathData = `
-            M ${x1},${y1}
-            L ${x2},${y1}
-            L ${x2},${y2}
-            L ${x1},${y2}
-            Z
-        `;
-    } else {
-        // Draw the chamfered path
-        pathData = `
-            M ${x1 + effectiveChamfer},${y1}
-            L ${x2 - effectiveChamfer},${y1}
-            L ${x2},${y1 + effectiveChamfer}
-            L ${x2},${y2 - effectiveChamfer}
-            L ${x2 - effectiveChamfer},${y2}
-            L ${x1 + effectiveChamfer},${y2}
-            L ${x1},${y2 - effectiveChamfer}
-            L ${x1},${y1 + effectiveChamfer}
-            Z
-        `;
-    }
-
-    path.setAttribute('d', pathData.trim());
-    path.setAttribute('fill', 'none');
-    path.setAttribute('stroke', color);
-    path.setAttribute('stroke-width', '3'); // TODO: Pass in in options.
-    
-    // Append the new path to the SVG. We no longer clear the SVG content.
-    svg.appendChild(path);
-}
-
-// Example usage:
-// Clear the SVG before a new set of highlights
-function clearAllBorders() {
-    const svg = document.getElementById('svg-overlay');
-    if (svg) {
-        svg.innerHTML = '';
-    }
-}
-
-// Clear any previous borders first
-clearAllBorders();
-
-// TODO: Make this all work dynamically.
-// TODO: Consider using tint filter on white for uniformity?
-addBorderAround('mainframe', { offset: 0, chamferSize: 8, color: '#3bffda' });
-addBorderAround('mainframe', { offset: 24, chamferSize: 20, color: '#3bffda' });
-
-addBorderAround('bl-graph', { offset: 0, chamferSize: 20, color: '#3bffda' });
-// TODO: also figure out inner border for bl-graph?
-addBorderAround('br-graph', { offset: 0, chamferSize: 8, color: '#3bffda' });
-addBorderAround('worldmap', { offset: 0, chamferSize: 8, color: '#3bffda' });
-
+  addBorder('foo1', ['mainframe'],  { offset: 0, chamferSize: 8, color: '#3bffda', strokeWidth: 3 });
+  addBorder('foo2', ['mainframe'],  { offset: 24, chamferSize: 20, color: '#3bffda', strokeWidth: 3 });
+  addBorder('foo3', ['bl-graph'], { offset: 0, chamferSize: 20, color: '#3bffda', strokeWidth: 2  });
+  addBorder('foo4', ['br-graph'], { offset: 0, chamferSize: 8, color: '#3bffda', strokeWidth: 2 });
+  addBorder('foo5', ['bcl-graph'],  { offset: 0, chamferSize: 0, color: '#3bffda', strokeWidth: 2 });
+  addBorder('foo6', ['bcr-graph'],  { offset: 0, chamferSize: 0, color: '#3bffda', strokeWidth: 2 });
+  addBorder('foo7', ['worldmap'], { offset: 0, chamferSize: 8, color: '#3bffda', strokeWidth: 2 });
   </script>
 </body>
 </html>
