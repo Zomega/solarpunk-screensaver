@@ -17,32 +17,59 @@
       align-items: center;
       background: #028366ff;
     }
+    #mainframe {
+      position: fixed;
+      left: auto;
+      top: auto;
+      /* TODO: This should be dynamic. For right now it's fixed to help match the layout. */
+      width: calc(1110px - 48px);
+      height: calc(694px - 48px);
+      padding: 24px;
+      padding-top: 16px; /*TODO: consider unifying.*/
+    }
     #testtext {
       position: absolute;
-      top: 0;
-      left: 0;
+      top: 16px;
+      left: 24px;
       text-transform: uppercase;
       font-size: 48px;
       margin: 0;
     }
     #ring {
-      width: 480px;
-      height: 480px;
+      /*TODO: Should parent to #mainframe*/
+      position: fixed;
+      left: auto;
+      /*TODO: This should be baked in better.*/
+      top: calc(50% - (564.8px / 2) - 20px);
+      width: 564.8px;
+      height: 564.8px;
       transform-origin: center;
       filter: url(#tint);
     }
     #worldmap {
-      top:50%;
-      left:0;
+      /* TODO migrate to grid */
+      top:286px;
+      left:28px;
+      width: 260px;
+      height: 162px;
       position: absolute;
       filter: url(#tint);
     }
-    #overlay {
+    #trace-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none; /* Crucial: Allows clicks to pass through */
+      z-index: 9998; /* Just below #gradient-overlay */
+    }
+    #gradient-overlay {
       position: fixed;
       top: 0;
       left: 0;
       opacity: 46.1351%;
-      z-index: 999;
+      z-index: 9999;
       pointer-events: none;
       width: 100vw;
       height: 100vh;
@@ -58,6 +85,24 @@
       z-index: -999;
       filter: url(#tint);
     }
+
+    .highlightable-element {
+        padding: 20px;
+        margin: 20px;
+        border: 1px solid #ccc;
+    }
+
+        #box1 {
+            background-color: #f0f8ff;
+        }
+
+        #box2 {
+            background-color: #fff0f5;
+        }
+
+        #box3 {
+            background-color: #f5fffa;
+        }
   </style>
 </head>
 <body>
@@ -70,10 +115,16 @@
       </feComponentTransfer>
     </filter>
   </svg>
-  <p id="testtext">Profile 58%</p>
-  <img id="worldmap" src="world_map.svg" alt="World Map">
+  <div id="mainframe">
+    <div id="testtext">Profile 58%</div>
+    <img id="worldmap" src="world_map.svg" alt="World Map">
+  </div>
+
+  <!-- TODO: Integrate inside mainframe -->
   <img id="ring" src="screensaver-ring.svg" alt="Ring">
-  <img id="overlay" src="screensaver-overlay.svg" alt="Overlay">
+
+  <svg id="trace-overlay" xmlns="http://www.w3.org/2000/svg"></svg>
+  <img id="gradient-overlay" src="screensaver-overlay.svg" alt="Overlay">
 
   <img id="mockup" src="screensaver-mockup.png" alt="Mockup">
 
@@ -130,6 +181,98 @@
     }
 
     requestAnimationFrame(animate);
+  </script>
+  <script>
+/**
+ * Adds an SVG border around a given HTML element with optional offset and chamfered corners.
+ * @param {string} elementId - The ID of the element to draw the border around.
+ * @param {object} options - An object containing configuration options.
+ * @param {number} options.offset - The distance to offset the border from the element (can be negative).
+ * @param {number} options.chamferSize - The size of the chamfered corner.
+ * @param {string} options.color - The stroke color for the border.
+ */
+function addBorderAround(elementId, options = {}) {
+    const { offset = 0, chamferSize = 0, color = 'blue' } = options;
+
+    const element = document.getElementById(elementId);
+    if (!element) {
+        console.error(`Element with ID "${elementId}" not found.`);
+        return;
+    }
+
+    const svg = document.getElementById('trace-overlay');
+    if (!svg) {
+        console.error('SVG overlay not found.');
+        return;
+    }
+
+    const rect = element.getBoundingClientRect();
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+
+    let pathData = '';
+
+    // Adjust coordinates for offset
+    const x1 = rect.left - offset;
+    const y1 = rect.top - offset;
+    const x2 = rect.right + offset;
+    const y2 = rect.bottom + offset;
+
+    // A simple check to ensure chamferSize doesn't exceed half of the shortest side
+    const maxChamfer = Math.min(rect.width, rect.height) / 2;
+    const effectiveChamfer = Math.min(chamferSize, maxChamfer);
+
+    // If chamferSize is 0, draw a simple rectangle
+    if (effectiveChamfer === 0) {
+        pathData = `
+            M ${x1},${y1}
+            L ${x2},${y1}
+            L ${x2},${y2}
+            L ${x1},${y2}
+            Z
+        `;
+    } else {
+        // Draw the chamfered path
+        pathData = `
+            M ${x1 + effectiveChamfer},${y1}
+            L ${x2 - effectiveChamfer},${y1}
+            L ${x2},${y1 + effectiveChamfer}
+            L ${x2},${y2 - effectiveChamfer}
+            L ${x2 - effectiveChamfer},${y2}
+            L ${x1 + effectiveChamfer},${y2}
+            L ${x1},${y2 - effectiveChamfer}
+            L ${x1},${y1 + effectiveChamfer}
+            Z
+        `;
+    }
+
+    path.setAttribute('d', pathData.trim());
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', color);
+    path.setAttribute('stroke-width', '3'); // TODO: Pass in in options.
+    
+    // Append the new path to the SVG. We no longer clear the SVG content.
+    svg.appendChild(path);
+}
+
+// Example usage:
+// Clear the SVG before a new set of highlights
+function clearAllBorders() {
+    const svg = document.getElementById('svg-overlay');
+    if (svg) {
+        svg.innerHTML = '';
+    }
+}
+
+// Clear any previous borders first
+clearAllBorders();
+
+// TODO: Make this all work dynamically.
+// TODO: Consider using tint filter on white for uniformity?
+addBorderAround('mainframe', { offset: 0, chamferSize: 8, color: '#3bffda' });
+addBorderAround('mainframe', { offset: 24, chamferSize: 20, color: '#3bffda' });
+
+addBorderAround('worldmap', { offset: 0, chamferSize: 8, color: '#3bffda' });
+
   </script>
 </body>
 </html>
