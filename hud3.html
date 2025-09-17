@@ -55,6 +55,31 @@
       position: absolute;
       filter: url(#tint);
     }
+    #bl-graph {
+        position: absolute;
+        left:28px;
+        bottom: 24px;
+        width: 254px;
+        height: 178px;
+    }
+    #br-graph {
+        position: absolute;
+        right: 24px;
+        bottom: 80px;
+        width: 242px;
+        height: 136px;
+    }
+    #br-percentages {
+      position: absolute;
+      right: 24px;
+      bottom: 24px;
+      width: 194px;
+      height: 24px;
+      padding: 7px 24px;
+      line-height: 24px;
+      background-color: #ff000066;
+      font-size: 24px;
+    }
     #trace-overlay {
       position: fixed;
       top: 0;
@@ -118,6 +143,9 @@
   <div id="mainframe">
     <div id="testtext">Profile 58%</div>
     <img id="worldmap" src="world_map.svg" alt="World Map">
+    <img id="bl-graph" src="graph2_placeholder.svg" alt="Graph2 Placeholder">
+    <img id="br-graph" src="graph1_placeholder.svg" alt="Graph1 Placeholder">
+    <div id=br-percentages>60%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20%</div>
   </div>
 
   <!-- TODO: Integrate inside mainframe -->
@@ -271,6 +299,9 @@ clearAllBorders();
 addBorderAround('mainframe', { offset: 0, chamferSize: 8, color: '#3bffda' });
 addBorderAround('mainframe', { offset: 24, chamferSize: 20, color: '#3bffda' });
 
+addBorderAround('bl-graph', { offset: 0, chamferSize: 20, color: '#3bffda' });
+// TODO: also figure out inner border for bl-graph?
+addBorderAround('br-graph', { offset: 0, chamferSize: 8, color: '#3bffda' });
 addBorderAround('worldmap', { offset: 0, chamferSize: 8, color: '#3bffda' });
 
   </script>
