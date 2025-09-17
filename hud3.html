@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sine Wave Rotation</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #028366;
+    }
+    #ring {
+      width: 480px;
+      height: 480px;
+      transform-origin: center;
+      filter: url(#tint);
+    }
+
+    #worldmap {
+      top:50%;
+      left:0;
+      position: absolute;
+      filter: url(#tint);
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0">
+    <filter id="tint" color-interpolation-filters="sRGB">
+      <feColorMatrix id="tintMatrix" type="matrix" values=""/>
+    </filter>
+  </svg>
+  <img id="worldmap" src="world_map.svg" alt="World Map">
+  <img id="ring" src="screensaver-ring.svg" alt="Ring">
+
+  <script>
+    function hexToRgb(hex) {
+      hex = hex.replace(/^#/, "");
+      if (hex.length === 3) hex = hex.split("").map(c => c + c).join("");
+      const num = parseInt(hex, 16);
+      return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
+    }
+
+function setTintColor(hex) {
+    const { r, g, b } = hexToRgb(hex);
+    const rf = (r / 255).toFixed(3);
+    const gf = (g / 255).toFixed(3);
+    const bf = (b / 255).toFixed(3);
+
+    // Standard ITU-R BT.709 luminance coefficients for greyscale
+    const lumR = 0.2126;
+    const lumG = 0.7152;
+    const lumB = 0.0722;
+
+    const values = `
+        ${(lumR * rf).toFixed(3)} ${(lumG * rf).toFixed(3)} ${(lumB * rf).toFixed(3)} 0 0
+        ${(lumR * gf).toFixed(3)} ${(lumG * gf).toFixed(3)} ${(lumB * gf).toFixed(3)} 0 0
+        ${(lumR * bf).toFixed(3)} ${(lumG * bf).toFixed(3)} ${(lumB * bf).toFixed(3)} 0 0
+        0 0 0 1 0
+    `.trim().replace(/\s+/g, " ");
+
+    document.getElementById("tintMatrix").setAttribute("values", values);
+}
+
+    setTintColor("#3bffda");
+  </script>
+
+  <script>
+    const ring = document.getElementById("ring");
+    let start = null;
+
+    function animate(timestamp) {
+      if (!start) start = timestamp;
+      const elapsed = (timestamp - start) / 1000; // seconds
+
+      // t = time in radians (adjust speed here with factor)
+      const t = elapsed * 2 * Math.PI / 5; // one base cycle ~5s
+
+      // rotation in degrees using your formula
+      const angle = 15 * Math.sin(t) + 15 * Math.sin(t / Math.PI);
+
+      ring.style.transform = `rotate(${angle}deg)`;
+
+      requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>
