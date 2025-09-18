@@ -29,6 +29,67 @@
       padding-top: 16px; /*TODO: consider unifying.*/
     }
 
+    #tl-label {
+        position: absolute;
+        top: 18px;
+        left: 28px;
+        padding: 0;
+        padding-left: 70px;
+        font-size: 16px;
+        margin: 0;
+        width: 140px;
+        height: 24px;
+        overflow: hidden;
+        line-height: 24px;
+        font-weight: bold;
+    }
+
+    #top-dot-greeblies {
+        position: absolute;
+        top: 18px;
+        left: 650px;
+        width: 80px;
+        height: 44px;
+        --grid-spacing: 12;
+        --dot-radius: 2;
+        --dot-color: #3bffda;
+        filter: drop-shadow(0 0 4px #3bffdacc);
+    }
+
+    #bottom-dot-greeblies {
+        position: absolute;
+        left: 466px;
+        bottom: 24px;
+        width: 216px;
+        height: 32px;
+        --grid-spacing: 24;
+        --dot-radius: 2.5;
+        --dot-color: #3bffda;
+        filter: drop-shadow(0 0 4px #3bffdacc);
+    }
+
+    #right-dot-greeblies {
+        position: absolute;
+        right: 240px;
+        bottom: 230px;
+        width: 32px;
+        height: 80px;
+        --grid-spacing: 24;
+        --dot-radius: 2.5;
+        --dot-color: #3bffda;
+        filter: drop-shadow(0 0 4px #3bffdacc);
+    }
+
+    #barchart {
+        position: absolute;
+        top: 44px;
+        left: 28px;
+        margin: 0;
+        width: 210px;
+        height: 66px;
+        overflow: hidden;
+    }
+
     #lefttext {
         text-align: justify;
         position: absolute;
@@ -44,8 +105,6 @@
         /*border-right: 1px solid white;*/
         line-height: calc(128px / 10);
         font-weight: bold;
-        /*Smaller glow to preserve detail.*/
-        filter: drop-shadow(0 0 2px #3bffdacc);
     }
 
     #ring {
@@ -179,20 +238,27 @@
     </filter>
   </svg>
   <div id="mainframe">
+    <div id="tl-label">Dashboard</div>
+    <img id="barchart" src="graph6_placeholder.svg" alt="Graph6 Placeholder" draggable="false">
     <div id="lefttext">
       Executing system log protocol 731-C. Local time 14:41:02. Active unit designation: Locus Alpha. Operational readiness: Green. All primary sub-systems nominal. Power core output at 98.4%, reserves holding steady. Data uplink synchronized. Atmospheric particulate density 12.7%, humidity 44%, barometric pressure 1012 millibars. External visual feeds show low-light conditions with significant atmospheric haze. Threat assessment probability elevated to 47.3% based on recent thermal anomalies and faint signal detection. System log entry: Targeting system reports biometrics scan inconclusive. Target signature identified as non-standard organic, classification pending. Proximity alert at 750 meters. System status: Active engagement protocol not initiated. Awaiting confirmation from central command. All local sensors are operating within established parameters. Bio-signs within the immediate zone are 0.0, outside of operational unit. Passive scan for additional hostiles continues on loop. Communication channel remains open, encrypted traffic detected on 1.4 GHz band, decryption progress: 4%. Visual feed [CAM-03] shows movement at a distance of 1.2 kilometers, classification unresolved, possibly non-threat wildlife. Main weapon systems are armed and in standby mode. Energy output for the personal field generator is stable at 99.8%. No internal system errors detected. Awaiting further instruction. Awaiting further instruction. Awaiting further instruction.
     </div>
-    <img id="worldmap" src="world_map.svg" alt="World Map">
-    <img id="r-progbar" src="graph5_placeholder.svg" alt="Graph5 Placeholder">
-    <img id="bl-graph" src="graph2_placeholder.svg" alt="Graph2 Placeholder">
-    <img id="bcl-graph" src="graph3_placeholder.svg" alt="Graph3 Placeholder">
-    <img id="bcr-graph" src="graph4_placeholder.svg" alt="Graph4 Placeholder">
-    <img id="br-graph" src="graph1_placeholder.svg" alt="Graph1 Placeholder">
+    <img id="worldmap" src="world_map.svg" alt="World Map" draggable="false">
+
+    <svg id="top-dot-greeblies" class="greeblie-dot-grid"></svg>
+    <svg id="bottom-dot-greeblies" class="greeblie-dot-grid"></svg>
+    <svg id="right-dot-greeblies" class="greeblie-dot-grid"></svg>
+
+    <img id="r-progbar" src="graph5_placeholder.svg" alt="Graph5 Placeholder" draggable="false">
+    <img id="bl-graph" src="graph2_placeholder.svg" alt="Graph2 Placeholder" draggable="false">
+    <img id="bcl-graph" src="graph3_placeholder.svg" alt="Graph3 Placeholder" draggable="false">
+    <img id="bcr-graph" src="graph4_placeholder.svg" alt="Graph4 Placeholder" draggable="false">
+    <img id="br-graph" src="graph1_placeholder.svg" alt="Graph1 Placeholder" draggable="false">
     <div id=br-percentages>60%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20%</div>
   </div>
 
   <!-- TODO: Integrate inside mainframe -->
-  <img id="ring" src="screensaver-ring.svg" alt="Ring">
+  <img id="ring" src="screensaver-ring.svg" alt="Ring" draggable="false">
 
   <svg id="trace-overlay" xmlns="http://www.w3.org/2000/svg"></svg>
   <img id="gradient-overlay" src="screensaver-overlay.svg" alt="Overlay">
@@ -268,5 +334,22 @@
   addBorder('foo6', ['bcr-graph'],  { offset: 0, chamferSize: 0, color: '#3bffda', strokeWidth: 2 });
   addBorder('foo7', ['worldmap'], { offset: 0, chamferSize: 8, color: '#3bffda', strokeWidth: 2 });
   </script>
+
+    <script type="module">
+        // TODO: Keep these updated as layouts shift.
+        import { drawDotGrid } from './dot_greeblies.js';
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const dotGridSVGs = document.querySelectorAll(".greeblie-dot-grid");
+            
+            // Loop through each SVG and draw its grid
+            dotGridSVGs.forEach(drawDotGrid);
+
+            // Listen for window resize events and redraw all grids
+            window.addEventListener('resize', () => {
+                dotGridSVGs.forEach(drawDotGrid);
+            });
+        });
+    </script>
 </body>
 </html>

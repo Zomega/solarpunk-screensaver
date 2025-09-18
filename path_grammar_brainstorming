@@ -1,0 +1,59 @@
+/*SVG PATH
+
+M ${x1 + effectiveChamfer},${y1}
+L ${x2 - effectiveChamfer},${y1}
+L ${x2},${y1 + effectiveChamfer}
+L ${x2},${y2 - effectiveChamfer}
+L ${x2 - effectiveChamfer},${y2}
+L ${x1 + effectiveChamfer},${y2}
+L ${x1},${y2 - effectiveChamfer}
+L ${x1},${y1 + effectiveChamfer}
+Z
+
+Trace Paths Below*/
+
+// TODO: Mark fade in?
+M #lbar.tr
+L #lbar.tl.clip(20)
+L #lbar.bl.clip(4)
+L #lbar.br.offsetx(8).clip(4)
+L #lbar.tr.offset(8).clip(4)
+L #lbar.tl.offset(8).clip(28)
+H #circle.rightside
+
+===
+
+// TODO: Mark at end?
+M #circle.leftside
+H #worldmap.tl.clip(8)
+L #worldmap.bl
+H #circle.leftside
+
+===
+
+M #lefttext.rightside.at(50%)
+H _ // Anon point.
+V #barchart.bl.offset(30).clip(30)
+V #barchart.rightside.at(50%)
+H #circle.leftside
+
+===
+
+M #graph2.tl
+L #graph2.bl.clip(2)
+L #graph2.br
+L #graph2.tr.clip(8)
+H #circle.rightside
+
+===
+
+M #profilecard.bl
+L #profilecard.br
+L #profilecard.tr.clip(30)
+// TODO: Mark fade out?
+L #profilecard.tl
+
+===
+
+// Example loop command
+O #profilecardcontainer.clip(20)
