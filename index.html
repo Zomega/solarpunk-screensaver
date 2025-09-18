@@ -27,18 +27,29 @@
       height: calc(694px - 48px);
       padding: 24px;
       padding-top: 16px; /*TODO: consider unifying.*/
+
+      display: grid;
+      grid-template-columns: 260px 140px 1fr 120px 32px 200px;
+      grid-template-rows: 24px 68px 1fr 1fr 85px 85px;
+      grid-column-gap: 16px;
+      grid-row-gap: 16px;
+
+      grid-template-areas:
+        "tl-label tl-label  .                    .         statusbox           statusbox"
+        "barchart .         .                    .         statusbox           statusbox"
+        "lefttext .         .                    .         .                   rightbox"
+        "worldmap .         .                    .         right-dot-greeblies r-progbar"
+        "bl-graph .         .                    .         br-graph            br-panel"
+        "bl-graph bcl-graph bottom-dot-greeblies bcr-graph br-graph            br-panel";
+      /* TODO: br-panel itself needs a sub-gridlayout */
     }
 
     #tl-label {
-        position: absolute;
-        top: 18px;
-        left: 28px;
+        grid-area: tl-label;
         padding: 0;
         padding-left: 70px;
         font-size: 16px;
         margin: 0;
-        width: 140px;
-        height: 24px;
         overflow: hidden;
         line-height: 24px;
         font-weight: bold;
@@ -81,31 +92,48 @@
     }
 
     #barchart {
-        position: absolute;
-        top: 44px;
-        left: 28px;
-        margin: 0;
-        width: 210px;
-        height: 66px;
-        overflow: hidden;
+      grid-area: barchart;
+
+      object-fit: fill;
+      height: 100%;
+      /* TODO: This might be better achived with a right margin */
+      width: 210px;
     }
 
     #lefttext {
-        text-align: justify;
-        position: absolute;
-        top: 135px;
-        left: 28px;
+        grid-area: lefttext;
+
         padding: 0;
         padding-right: 4px;
-        font-size: 8px;
         margin: 0;
+        /* TODO: This might be better achived with a right margin */
         width: 185px;
-        height: 128px;
+
+        font-size: 8px;  
         overflow: hidden;
-        /*border-right: 1px solid white;*/
-        line-height: calc(128px / 10);
+        text-align: justify;
+        line-height: 13px;
         font-weight: bold;
     }
+
+
+    /*#rightbox {
+      grid-area: rightbox;
+
+      margin: 0;
+      padding: 0;
+      height: 136px;
+
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: 1fr 40px;
+      grid-column-gap: 16px;
+      grid-row-gap: 16px;
+
+      grid-template-areas:
+        "righttext dollarsigngreeblie"
+        "r-progbar2 r-progbar2";
+    }*/
 
     #rightbox {
       position: absolute;
@@ -163,34 +191,34 @@
       filter: url(#tint) drop-shadow(0 0 4px #3bffdacc);
     }
     #worldmap {
-      /* TODO migrate to grid */
-      top:286px;
-      left:28px;
-      width: 260px;
-      height: 162px;
-      position: absolute;
+      grid-area: worldmap;
+
+      object-fit: fill;
+      width: 100%;
+      height: 100%;
+
       filter: url(#tint) drop-shadow(0 0 4px #3bffdacc);
     }
     #bl-graph {
-        position: absolute;
-        left:28px;
-        bottom: 24px;
-        width: 254px;
-        height: 178px;
+        grid-area: bl-graph;
+
+        object-fit: fill;
+        width: 100%;
+        height: 100%;
     }
     #bcl-graph {
-        position: absolute;
-        left: 308px;
-        bottom: 24px;
-        width: 140px;
-        height: 85px;
+        grid-area: bcl-graph;
+
+        object-fit: fill;
+        width: 100%;
+        height: 100%;
     }
     #bcr-graph {
-        position: absolute;
-        right: 308px;
-        bottom: 24px;
-        width: 100px;
-        height: 85px;
+        grid-area: bcr-graph;
+
+        object-fit: fill;
+        width: 100%;
+        height: 100%;
     }
     #br-graph {
         position: absolute;
@@ -200,11 +228,11 @@
         height: 136px;
     }
     #r-progbar {
-        position: absolute;
-        right: 24px;
-        bottom: 242px;
-        width: 200px;
-        height: 100px;
+        grid-area: r-progbar;
+
+        object-fit: fill;
+        width: 100%;
+        height: 100%;
     }
     #br-percentages {
       position: absolute;
