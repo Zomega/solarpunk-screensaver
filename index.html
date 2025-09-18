@@ -107,6 +107,50 @@
         font-weight: bold;
     }
 
+    #rightbox {
+      position: absolute;
+      top: 158px;
+      right: 28px;
+      margin: 0;
+      padding: 0;
+      width: 198px;
+      height: 136px;
+
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: 1fr 40px;
+      grid-column-gap: 16px;
+      grid-row-gap: 16px;
+
+      grid-template-areas:
+        "righttext dollarsigngreeblie"
+        "r-progbar2 r-progbar2";
+    }
+
+    #righttext {
+      grid-area: righttext;
+
+      font-size: 8px;
+      padding-left: 4px;      
+      overflow: hidden;
+      text-align: justify;
+      text-justify: inter-character;
+      border: 2px solid #3bffda;
+      border-right: none;
+      line-height: 13px;
+      font-weight: bold;
+
+      filter: drop-shadow(0 0 4px #3bffdacc);
+    }
+
+    #dollarsigngreeblie {
+      grid-area: dollarsigngreeblie;
+    }
+
+    #r-progbar2 {
+      grid-area: r-progbar2;
+    }
+
     #ring {
       /*TODO: Should parent to #mainframe*/
       position: fixed;
@@ -238,21 +282,35 @@
     </filter>
   </svg>
   <div id="mainframe">
+    <!-- Left Column -->
     <div id="tl-label">Dashboard</div>
     <img id="barchart" src="graph6_placeholder.svg" alt="Graph6 Placeholder" draggable="false">
     <div id="lefttext">
       Executing system log protocol 731-C. Local time 14:41:02. Active unit designation: Locus Alpha. Operational readiness: Green. All primary sub-systems nominal. Power core output at 98.4%, reserves holding steady. Data uplink synchronized. Atmospheric particulate density 12.7%, humidity 44%, barometric pressure 1012 millibars. External visual feeds show low-light conditions with significant atmospheric haze. Threat assessment probability elevated to 47.3% based on recent thermal anomalies and faint signal detection. System log entry: Targeting system reports biometrics scan inconclusive. Target signature identified as non-standard organic, classification pending. Proximity alert at 750 meters. System status: Active engagement protocol not initiated. Awaiting confirmation from central command. All local sensors are operating within established parameters. Bio-signs within the immediate zone are 0.0, outside of operational unit. Passive scan for additional hostiles continues on loop. Communication channel remains open, encrypted traffic detected on 1.4 GHz band, decryption progress: 4%. Visual feed [CAM-03] shows movement at a distance of 1.2 kilometers, classification unresolved, possibly non-threat wildlife. Main weapon systems are armed and in standby mode. Energy output for the personal field generator is stable at 99.8%. No internal system errors detected. Awaiting further instruction. Awaiting further instruction. Awaiting further instruction.
     </div>
     <img id="worldmap" src="world_map.svg" alt="World Map" draggable="false">
-
-    <svg id="top-dot-greeblies" class="greeblie-dot-grid"></svg>
-    <svg id="bottom-dot-greeblies" class="greeblie-dot-grid"></svg>
-    <svg id="right-dot-greeblies" class="greeblie-dot-grid"></svg>
-
-    <img id="r-progbar" src="graph5_placeholder.svg" alt="Graph5 Placeholder" draggable="false">
     <img id="bl-graph" src="graph2_placeholder.svg" alt="Graph2 Placeholder" draggable="false">
+
+    <!-- Top Row -->
+    <svg id="top-dot-greeblies" class="greeblie-dot-grid"></svg>
+
+    <!-- Bottom Row -->
     <img id="bcl-graph" src="graph3_placeholder.svg" alt="Graph3 Placeholder" draggable="false">
+    <svg id="bottom-dot-greeblies" class="greeblie-dot-grid"></svg>
     <img id="bcr-graph" src="graph4_placeholder.svg" alt="Graph4 Placeholder" draggable="false">
+
+    <!-- Right Column -->
+
+    <div id="rightbox">
+      <div id="righttext">
+        Executing system log protocol 731-C. Local time 14:41:02. Active unit designation: Locus Alpha. Operational readiness: Green. All primary sub-systems nominal. Power core output at 98.4%, reserves holding steady. Data uplink synchronized. Atmospheric particulate density 12.7%, humidity 44%, barometric pressure 1012 millibars. External visual feeds show low-light conditions with significant atmospheric haze. Threat assessment probability elevated to 47.3% based on recent thermal anomalies and faint signal detection. System log entry: Targeting system reports biometrics scan inconclusive. Target signature identified as non-standard organic, classification pending. Proximity alert at 750 meters. System status: Active engagement protocol not initiated. Awaiting confirmation from central command. All local sensors are operating within established parameters. Bio-signs within the immediate zone are 0.0, outside of operational unit. Passive scan for additional hostiles continues on loop. Communication channel remains open, encrypted traffic detected on 1.4 GHz band, decryption progress: 4%. Visual feed [CAM-03] shows movement at a distance of 1.2 kilometers, classification unresolved, possibly non-threat wildlife. Main weapon systems are armed and in standby mode. Energy output for the personal field generator is stable at 99.8%. No internal system errors detected. Awaiting further instruction. Awaiting further instruction. Awaiting further instruction.
+      </div>
+      <div id="dollarsigngreeblie"></div>
+      <div id="r-progbar2"></div>
+    </div>
+    <!-- TODO HERE -->
+    <svg id="right-dot-greeblies" class="greeblie-dot-grid"></svg>
+    <img id="r-progbar" src="graph5_placeholder.svg" alt="Graph5 Placeholder" draggable="false">
     <img id="br-graph" src="graph1_placeholder.svg" alt="Graph1 Placeholder" draggable="false">
     <div id=br-percentages>60%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20%</div>
   </div>
@@ -299,6 +357,9 @@
   </script>
 
   <script>
+    // TODO: When this is running, flickering artifacts show up.
+    // I suspect it's not specifically this, more to do with svg compositing
+    // But still it's annoying.
     const ring = document.getElementById("ring");
     let start = null;
 
@@ -333,6 +394,8 @@
   addBorder('foo5', ['bcl-graph'],  { offset: 0, chamferSize: 0, color: '#3bffda', strokeWidth: 2 });
   addBorder('foo6', ['bcr-graph'],  { offset: 0, chamferSize: 0, color: '#3bffda', strokeWidth: 2 });
   addBorder('foo7', ['worldmap'], { offset: 0, chamferSize: 8, color: '#3bffda', strokeWidth: 2 });
+  addBorder('foo8', ['dollarsigngreeblie'], { offset: 0, chamferSize: 2, color: '#3bffda', strokeWidth: 2 });
+  addBorder('foo9', ['r-progbar2'], { offset: 0, chamferSize: 2, color: '#3bffda', strokeWidth: 2 });
   </script>
 
     <script type="module">
