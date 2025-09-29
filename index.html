@@ -29,19 +29,27 @@
       padding-top: 16px; /*TODO: consider unifying.*/
 
       display: grid;
-      grid-template-columns: 260px 140px 1fr 120px 32px 200px;
-      grid-template-rows: 24px 68px 1fr 1fr 85px 85px;
+      grid-template-columns: 260px 140px 1fr 46px 60px 32px 200px;
+      grid-template-rows: 24px 68px 1fr 1fr 85px 37px 32px;
       grid-column-gap: 16px;
       grid-row-gap: 16px;
 
       grid-template-areas:
-        "tl-label tl-label  .                    .         statusbox           statusbox"
-        "barchart .         .                    .         statusbox           statusbox"
-        "lefttext .         .                    .         .                   rightbox"
-        "worldmap .         .                    .         right-dot-greeblies r-progbar"
-        "bl-graph .         .                    .         br-graph            br-panel"
-        "bl-graph bcl-graph bottom-dot-greeblies bcr-graph br-graph            br-panel";
-      /* TODO: br-panel itself needs a sub-gridlayout */
+        "tl-label tl-label  .                    .         statusbox statusbox           statusbox"
+        "barchart .         .                    .         statusbox statusbox           statusbox"
+        "lefttext .         .                    .         .         .                   rightbox"
+        "worldmap .         .                    .         .         right-dot-greeblies r-progbar"
+        "bl-graph .         .                    .         .         br-panel            br-panel"
+        "bl-graph bcl-graph .                    bcr-graph bcr-graph br-panel            br-panel"
+        "bl-graph bcl-graph bottom-dot-greeblies bcr-graph bcr-graph br-panel            br-panel";
+    }
+
+    #statusbox {
+      grid-area: statusbox;
+
+      object-fit: fill;
+      width: 100%;
+      height: 100%;
     }
 
     #tl-label {
@@ -68,18 +76,18 @@
     }
 
     #bottom-dot-greeblies {
-        position: absolute;
-        left: 466px;
-        bottom: 24px;
-        width: 216px;
-        height: 32px;
+        grid-area: bottom-dot-greeblies;
+        object-fit: fill;
+        height: 100%;
+        width: 100%;
+
         --grid-spacing: 24;
         --dot-radius: 2.5;
         --dot-color: #3bffda;
         filter: drop-shadow(0 0 4px #3bffdacc);
     }
 
-    #right-dot-greeblies {
+    #right-dot-greeblies {            
         position: absolute;
         right: 240px;
         bottom: 230px;
@@ -117,32 +125,11 @@
     }
 
 
-    /*#rightbox {
+    #rightbox {
       grid-area: rightbox;
 
       margin: 0;
       padding: 0;
-      height: 136px;
-
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: 1fr 40px;
-      grid-column-gap: 16px;
-      grid-row-gap: 16px;
-
-      grid-template-areas:
-        "righttext dollarsigngreeblie"
-        "r-progbar2 r-progbar2";
-    }*/
-
-    #rightbox {
-      position: absolute;
-      top: 158px;
-      right: 28px;
-      margin: 0;
-      padding: 0;
-      width: 198px;
-      height: 136px;
 
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -162,11 +149,13 @@
       padding-left: 4px;      
       overflow: hidden;
       text-align: justify;
-      text-justify: inter-character;
       border: 2px solid #3bffda;
       border-right: none;
       line-height: 13px;
       font-weight: bold;
+
+      /* TODO WHY DOES IT DO THIS? DO WE NEED A WRAPPER?*/
+      height: 96px;
 
       filter: drop-shadow(0 0 4px #3bffdacc);
     }
@@ -220,12 +209,29 @@
         width: 100%;
         height: 100%;
     }
+
+    #br-panel {
+      grid-area: br-panel;
+
+      margin: 0;
+      padding: 0;
+
+      display: grid;
+      grid-template-columns: 1fr 80px;
+      grid-template-rows: 1fr 40px;
+      grid-column-gap: 16px;
+      grid-row-gap: 16px;
+
+      grid-template-areas:
+        "br-graph  br-graph"
+        "br-percentages br-line-greeblie";
+    }
     #br-graph {
-        position: absolute;
-        right: 24px;
-        bottom: 80px;
-        width: 242px;
-        height: 136px;
+        grid-area: br-graph;
+
+        object-fit: fill;
+        width: 100%;
+        height: 100%;
     }
     #r-progbar {
         grid-area: r-progbar;
@@ -235,16 +241,12 @@
         height: 100%;
     }
     #br-percentages {
-      position: absolute;
-      right: 24px;
-      bottom: 24px;
-      width: 194px;
-      height: 24px;
-      padding: 7px 24px;
-      line-height: 24px;
-      /*background-color: #ff000066;*/
-      font-size: 24px;
-      filter: drop-shadow(0 0 4px #3bffdacc);
+        grid-area: br-percentages;
+        padding-left: 24px;
+        line-height: 100%;
+        /* background-color: #ff000066; */
+        font-size: 24px;
+        filter: drop-shadow(0 0 4px #3bffdacc);
     }
     #trace-overlay {
       position: fixed;
@@ -285,18 +287,6 @@
         margin: 20px;
         border: 1px solid #ccc;
     }
-
-        #box1 {
-            background-color: #f0f8ff;
-        }
-
-        #box2 {
-            background-color: #fff0f5;
-        }
-
-        #box3 {
-            background-color: #f5fffa;
-        }
   </style>
 </head>
 <body>
@@ -329,6 +319,7 @@
 
     <!-- Right Column -->
 
+    <img id="statusbox" src="graph7_placeholder.svg" alt="Graph7 Placeholder" draggable="false">
     <div id="rightbox">
       <div id="righttext">
         Executing system log protocol 731-C. Local time 14:41:02. Active unit designation: Locus Alpha. Operational readiness: Green. All primary sub-systems nominal. Power core output at 98.4%, reserves holding steady. Data uplink synchronized. Atmospheric particulate density 12.7%, humidity 44%, barometric pressure 1012 millibars. External visual feeds show low-light conditions with significant atmospheric haze. Threat assessment probability elevated to 47.3% based on recent thermal anomalies and faint signal detection. System log entry: Targeting system reports biometrics scan inconclusive. Target signature identified as non-standard organic, classification pending. Proximity alert at 750 meters. System status: Active engagement protocol not initiated. Awaiting confirmation from central command. All local sensors are operating within established parameters. Bio-signs within the immediate zone are 0.0, outside of operational unit. Passive scan for additional hostiles continues on loop. Communication channel remains open, encrypted traffic detected on 1.4 GHz band, decryption progress: 4%. Visual feed [CAM-03] shows movement at a distance of 1.2 kilometers, classification unresolved, possibly non-threat wildlife. Main weapon systems are armed and in standby mode. Energy output for the personal field generator is stable at 99.8%. No internal system errors detected. Awaiting further instruction. Awaiting further instruction. Awaiting further instruction.
@@ -336,11 +327,12 @@
       <div id="dollarsigngreeblie"></div>
       <div id="r-progbar2"></div>
     </div>
-    <!-- TODO HERE -->
     <svg id="right-dot-greeblies" class="greeblie-dot-grid"></svg>
     <img id="r-progbar" src="graph5_placeholder.svg" alt="Graph5 Placeholder" draggable="false">
-    <img id="br-graph" src="graph1_placeholder.svg" alt="Graph1 Placeholder" draggable="false">
-    <div id=br-percentages>60%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20%</div>
+    <div id="br-panel">
+      <img id="br-graph" src="graph1_placeholder.svg" alt="Graph1 Placeholder" draggable="false">
+      <div id=br-percentages>60%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20%</div>
+    </div>
   </div>
 
   <!-- TODO: Integrate inside mainframe -->

@@ -2,9 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="211.36365"
-   height="114.39394"
-   viewBox="0 0 55.9233 30.266731"
+   width="422.728"
+   height="228.78799"
+   viewBox="0 0 111.84679 60.53349"
    version="1.1"
    id="svg1"
    xml:space="preserve"
@@ -26,9 +26,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="3.72"
-     inkscape:cx="84.677419"
-     inkscape:cy="43.548387"
+     inkscape:zoom="1.32"
+     inkscape:cx="204.92424"
+     inkscape:cy="153.78788"
      inkscape:window-width="1536"
      inkscape:window-height="897"
      inkscape:window-x="0"
@@ -68,12 +68,12 @@
      transform="translate(-141.96099,-177.05434)"><g
        id="g12"
        transform="matrix(0.99620687,0,0,1,-5.3008065,398.94167)"><path
-         style="fill:none;fill-opacity:1;stroke:#3bffda;stroke-width:0.79526;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Dot);marker-mid:url(#Dot);marker-end:url(#Dot)"
-         d="m 152.60457,-202.81207 3.38561,-5.00399 7.99562,-5.11498 7.09083,2.51861 5.94423,4.338 4.57624,-2.90155 4.43385,3.5509 7.44247,-9.24286"
+         style="fill:none;fill-opacity:1;stroke:#3bffda;stroke-width:1.5905;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Dot);marker-mid:url(#Dot);marker-end:url(#Dot)"
+         d="m 163.08818,-186.37956 6.77113,-10.00794 15.99106,-10.2299 14.18148,5.0372 11.88833,8.67596 9.15236,-5.80308 8.8676,7.10176 14.88476,-18.48561"
          id="path15"
          sodipodi:nodetypes="cccccccc" /><path
-         style="fill:none;fill-opacity:1;stroke:#16a98d;stroke-width:0.79526;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Dot);marker-mid:url(#Dot);marker-end:url(#Dot)"
-         d="m 152.89015,-196.19749 17.23631,-6.71098 3.6405,4.27347 11.25712,-4.36652 4.50524,1.98616 5.30061,-2.05928"
+         style="fill:none;fill-opacity:1;stroke:#16a98d;stroke-width:1.5905;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Dot);marker-mid:url(#Dot);marker-end:url(#Dot)"
+         d="m 162.01847,-173.15048 34.47221,-13.42188 7.28091,8.54688 22.51397,-8.73299 9.01037,3.9723 10.6011,-4.11853"
          id="path2"
          sodipodi:nodetypes="cccccc" /></g><g
        id="g34"
