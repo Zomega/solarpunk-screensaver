@@ -34,7 +34,7 @@ ClosePath "Z"
 
 // O: Example loop/border command (from source 5)
 OvalCommand "O"
-  = "O" _ ElementRef _ { return { command: 'O', element: ElementRef }; }
+  = "O" _ element:ElementRef _ { return { command: 'O', element: element }; }
 
 // === COORDINATES AND REFERENCES ===
 

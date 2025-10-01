@@ -165,7 +165,7 @@ function peg$parse(input, options) {
       peg$c21 = peg$otherExpectation("O"),
       peg$c22 = "O",
       peg$c23 = peg$literalExpectation("O", false),
-      peg$c24 = function() { return { command: 'O', element: ElementRef }; },
+      peg$c24 = function(element) { return { command: 'O', element: element }; },
       peg$c25 = peg$otherExpectation("_"),
       peg$c26 = "_",
       peg$c27 = peg$literalExpectation("_", false),
@@ -680,7 +680,7 @@ function peg$parse(input, options) {
           s4 = peg$parse_();
           if (s4 !== peg$FAILED) {
             peg$savedPos = s0;
-            s1 = peg$c24();
+            s1 = peg$c24(s3);
             s0 = s1;
           } else {
             peg$currPos = s0;
