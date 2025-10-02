@@ -402,23 +402,35 @@
   </script>
 
   <script type="module">
-  import { addBorder, clearAllBorders } from './borders.js';
-  import { test_trace_parser } from './traces.js';
+  import { addTrace, clearAllTraces } from './traces.js';
 
-  test_trace_parser(); // TODO: Do smarter things.
+  clearAllTraces();
 
-  // Now you can call the functions imported from borders.js
-  clearAllBorders();
+  addTrace('O #mainframe.clip(8)', 'foo1',  { color: '#3bffda', strokeWidth: 3 });
+  addTrace('O #mainframe.offset(24).clip(20)', 'foo2', { color: '#3bffda', strokeWidth: 3 });
+  /*addTrace(`
+    M #mainframe.tr
+    L #mainframe.tl.clip(20)
+    L #mainframe.bl.clip(4)
+    L #statusbox.br
+    L #bl-graph.br
+    `,
+    'nonsense-trace',
+    { color: '#ff0000', strokeWidth: 1 }
+  )*/
 
-  addBorder('foo1', ['mainframe'],  { offset: 0, chamferSize: 8, color: '#3bffda', strokeWidth: 3 });
-  addBorder('foo2', ['mainframe'],  { offset: 24, chamferSize: 20, color: '#3bffda', strokeWidth: 3 });
-  addBorder('foo3', ['bl-graph'], { offset: 0, chamferSize: 20, color: '#3bffda', strokeWidth: 2  });
-  addBorder('foo4', ['br-graph'], { offset: 0, chamferSize: 8, color: '#3bffda', strokeWidth: 2 });
-  addBorder('foo5', ['bcl-graph'],  { offset: 0, chamferSize: 0, color: '#3bffda', strokeWidth: 2 });
-  addBorder('foo6', ['bcr-graph'],  { offset: 0, chamferSize: 0, color: '#3bffda', strokeWidth: 2 });
-  addBorder('foo7', ['worldmap'], { offset: 0, chamferSize: 8, color: '#3bffda', strokeWidth: 2 });
-  addBorder('foo8', ['dollarsigngreeblie'], { offset: 0, chamferSize: 2, color: '#3bffda', strokeWidth: 2 });
-  addBorder('foo9', ['r-progbar2'], { offset: 0, chamferSize: 2, color: '#3bffda', strokeWidth: 2 });
+  addTrace('O #bl-graph.clip(20)', 'foo3',  { color: '#3bffda', strokeWidth: 2 });
+  addTrace('O #br-graph.clip(8)', 'foo4',  { color: '#3bffda', strokeWidth: 2 });
+  addTrace('O #bcl-graph', 'foo5',  { color: '#3bffda', strokeWidth: 2 });
+  addTrace('O #bcr-graph', 'foo6',  { color: '#3bffda', strokeWidth: 2 });
+  addTrace(`
+    M #worldmap.tr
+    L #worldmap.tl.clip(8)
+    L #worldmap.bl.clip(8)
+    L #worldmap.br
+    `, 'foo7',  { color: '#3bffda', strokeWidth: 2 });
+  addTrace('O #dollarsigngreeblie.clip(2)', 'foo8',  { color: '#3bffda', strokeWidth: 2 });
+  addTrace('O #r-progbar2.clip(2)', 'foo9',  { color: '#3bffda', strokeWidth: 2 });
   </script>
 
     <script type="module">

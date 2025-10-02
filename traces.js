@@ -1,12 +1,34 @@
 import { parse } from './trace_grammar.js';
 
-// TODO: Combine and integrate with borders.
-import { getElementPosition } from './borders.js'; // Use this line if borders.js exports it
+const traceInstances = new Map();
+const resizeObserver = new ResizeObserver(updateTraces);
+resizeObserver.observe(document.body);
+window.addEventListener('scroll', updateTraces);
+
+/**
+ * Retrieves the bounding client rectangle for a DOM element by its ID.
+ * The coordinates (left, top, right, bottom) are relative to the viewport.
+ * This function is used by the path grammar resolver to find element coordinates.
+ *
+ * @param {string} elementId - The ID of the HTML element.
+ * @returns {DOMRect | null} The DOMRect object, or null if the element isn't found.
+ */
+function getElementPosition(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        // getBoundingClientRect returns the element's size and position relative to the viewport.
+        return element.getBoundingClientRect();
+    }
+    return null;
+}
 
 
 // Export the public functions
 export {
-    test_trace_parser
+    addTrace,
+    removeTrace,
+    clearAllTraces,
+    getElementPosition,
 };
 
 
@@ -16,132 +38,320 @@ export {
  */
 function calculateCorner(rect, corner) {
     switch (corner) {
-        case 'tl': return { x: rect.left, y: rect.top };
-        case 'tr': return { x: rect.right, y: rect.top };
-        case 'bl': return { x: rect.left, y: rect.bottom };
-        case 'br': return { x: rect.right, y: rect.bottom };
-        case 'leftside': return { x: rect.left, y: rect.top + rect.height / 2 };
-        case 'rightside': return { x: rect.right, y: rect.top + rect.height / 2 };
-        // Add top/bottom side centers if needed
-        default: return { x: rect.left, y: rect.top };
+        case 'tl': return {
+            type: 'explicit',
+            point: { x: rect.left, y: rect.top },
+            corner: 'tl',
+        };
+        case 'tr': return {
+            type: 'explicit',
+            point: { x: rect.right, y: rect.top },
+            corner: 'tr',
+        };
+        case 'bl': return {
+            type: 'explicit',
+            point: { x: rect.left, y: rect.bottom },
+            corner: 'bl',
+        };
+        case 'br': return {
+            type: 'explicit',
+            point: { x: rect.right, y: rect.bottom },
+            corner: 'br',
+        };
+        case 'leftside': return {
+            type: 'explicit',
+            point: { x: rect.left, y: rect.top + rect.height / 2 },
+            corner: 'leftside',
+        };
+        case 'rightside': return {
+            type: 'explicit',
+            point: { x: rect.right, y: rect.top + rect.height / 2 },
+            corner: 'rightside',
+        };
+        // TODO: Add top/bottom side centers if needed
+        default: 
+            console.error("Unhandled corner.", corner);
+            return null; 
     }
 }
 
 
 /**
+ * Applies a clip modifier to a list of initial points based on a corner and value.
+ * For each input point, it generates two new points forming a short segment
+ * that "clips" the corner inward by 'val'.
+ * * @param {Array<Object>} initial - List of point objects: [{type: 'explicit', point: {x, y}, corner: '...'}]
+ * @param {string} corner - The corner being clipped ('tl', 'tr', 'br', 'bl').
+ * @param {number} val - The clip distance.
+ * @returns {Array<Object>} A flattened list of all new clipped point objects.
+ */
+function applyClipModifier(initial, val) {
+    // 1. Guard for zero value
+    if (val === 0) {
+        return initial;
+    }
+
+    console.log("PRE-clip", initial);
+
+    // 2. Use flatMap to iterate over every initial point and flatten the results.
+    // Each initial point will be replaced by two new clipped points.
+    return initial.flatMap(p => {
+        const x = p.point.x;
+        const y = p.point.y;
+
+        let points = [];
+
+        // Use switch statement for corner-specific logic
+        switch (p.corner) {
+            case 'tl':
+                points = [
+                    { type: 'explicit', point: { x: x, y: y + val } },
+                    { type: 'explicit', point: { x: x + val, y: y } },
+                ];
+                break;
+
+            case 'tr':
+                points = [
+                    { type: 'explicit', point: { x: x - val, y: y } },
+                    { type: 'explicit', point: { x: x, y: y + val } },
+                ];
+                break;
+
+            case 'br':
+                points = [
+                    { type: 'explicit', point: { x: x, y: y - val } },
+                    { type: 'explicit', point: { x: x - val, y: y } },
+                ];
+                break;
+
+            case 'bl':
+                points = [
+                    { type: 'explicit', point: { x: x + val, y: y } },
+                    { type: 'explicit', point: { x: x, y: y - val } },
+                ];
+                break;
+
+            default:
+                // If corner is unknown, do nothing.
+                points = [p];
+                break;
+        }
+
+        // Return the new points list for flatMap to combine
+        return points;
+    });
+}
+
+
+/**
+ * Applies an offset modifier to a list of initial points, moving each point 
+ * OUTWARD from the element edge by 'val'.
+ * * @param {Array<Object>} initial - List of point objects: [{type: 'explicit', point: {x, y}, corner: '...'}]
+ * @param {string} corner - The corner or side being offset (e.g., 'tl', 'rightside').
+ * @param {number} val - The offset distance.
+ * @returns {Array<Object>} A list of modified point objects.
+ */
+function applyOffsetModifier(initial, val) {
+    // 1. Guard for zero value
+    if (val === 0) {
+        return initial;
+    }
+
+    console.log("PRE-offset", initial);
+
+    return initial.map(p => {
+        let x = p.point.x;
+        let y = p.point.y;
+        let corner = p.corner;
+        
+        if (corner === 'leftside') {
+            x -= val;
+        } else if (corner === 'rightside') {
+            x += val;
+        } else if (corner === 'topside') {
+            y -= val;
+        } else if (corner === 'bottomside') {
+            y += val;
+        } 
+        else {
+            // Horizontal adjustment
+            if (corner.includes('l')) x -= val; // Left
+            if (corner.includes('r')) x += val; // Right
+
+            // Vertical adjustment
+            if (corner.includes('t')) y -= val; // Top
+            if (corner.includes('b')) y += val; // Bottom
+        }
+
+        // Return the modified point object, preserving 'type' and 'corner' if present.
+        return {
+            ...p, // Spread existing properties (like type)
+            point: { x, y }
+        };
+    });
+}
+
+function applyOffsetXModifier(initial, amount) {
+    console.log("PRE-offsetx", initial);
+    let x = initial[0].point.x;
+    let y = initial[0].point.y;
+
+    // TODO: Redefine this.
+    x += val;
+    return [
+        {
+            type: 'explicit',
+            point: { x, y },
+        }
+    ];
+}
+
+
+function applyOffsetYModifier(initial, amount) {
+    console.log("PRE-offsety", initial);
+    let x = initial[0].point.x;
+    let y = initial[0].point.y;
+
+    // TODO: Redefine this.
+    y += val;
+    return [
+        {
+            type: 'explicit',
+            point: { x, y },
+        }
+    ];
+}
+
+function applyAtModifier(initial, rect, corner, amount) {
+    console.log("PRE-at", initial);
+    let x = initial[0].point.x;
+    let y = initial[0].point.y;
+
+    // Calculate width and height from the rect for use in '%' calculations (or 'at')
+    // TODO: Figure out how to do this in a reproducable way.
+    const width = rect.right - rect.left;
+    const height = rect.bottom - rect.top;
+
+    if (corner.includes('side')) {
+        // For vertical sides ('leftside', 'rightside'), 'at' specifies the Y position
+        // Assume 'val' is 0 to 1 for fractional position.
+        y = rect.top + (height * val);
+    } 
+    // Note: Horizontal sides ('topside', 'bottomside') would use width for X.
+    // Ignoring 'at' on corner points.
+    return [
+        {
+            type: 'explicit',
+            point: { x, y },
+        }
+    ];
+}
+
+/**
  * Applies all modifiers to the base {x, y} coordinate.
  *
- * @param {number} initialX - The base X coordinate (from calculateCorner).
- * @param {number} initialY - The base Y coordinate (from calculateCorner).
+ * @param {number} initial - The base coordinate path.
  * @param {Object} rect - The element's bounding rectangle (e.g., {left, top, right, bottom}).
  * @param {string} corner - The corner type (e.g., 'tl', 'tr', 'leftside').
  * @param {Array<Object>|undefined} modifiers - An array of modifier nodes, or undefined.
  * @returns {{x: number, y: number}} The resolved point.
  */
-function applyModifiers(initialX, initialY, rect, corner, modifiers) {
+function applyModifiers(initial, rect, corner, modifiers) {
     // FIX: Guard clause to handle undefined or non-array 'modifiers'
     if (!modifiers || !Array.isArray(modifiers)) {
-        return { x: initialX, y: initialY };
+        return initial;
     }
 
-    let x = initialX;
-    let y = initialY;
-    
-    // Calculate width and height from the rect for use in '%' calculations (or 'at')
-    const width = rect.right - rect.left;
-    const height = rect.bottom - rect.top;
-
-    // console.log(modifiers); // Retain or remove debugging logs as needed
+    let current = initial;
 
     modifiers.forEach(mod => {
         // Assume 'mod.value' is already a number, potentially resolving percentages elsewhere.
         // If 'val' is NaN due to missing mod.value, the arithmetic will handle it.
         const val = mod.value; 
 
-        // console.log("VAL", val, mod.value); // Retain or remove debugging logs as needed
-
         switch (mod.type) {
             case 'clip':
-                // Moves point INWARD from the element edge by 'val'
-                if (corner.includes('l')) x += val; // Left sides move right
-                if (corner.includes('r')) x -= val; // Right sides move left
-                if (corner.includes('t')) y += val; // Top sides move down
-                if (corner.includes('b')) y -= val; // Bottom sides move up
-                
-                // Side corners only adjust one axis
-                if (corner === 'leftside') x += val;
-                if (corner === 'rightside') x -= val;
-                // 'topside' and 'bottomside' are missing from original logic, but would adjust Y
+                current = applyClipModifier(current, val);
                 break;
-
             case 'offset':
-                // Moves point OUTWARD from the element edge by 'val' (opposite of clip)
-                if (corner.includes('l')) x -= val;
-                if (corner.includes('r')) x += val;
-                if (corner.includes('t')) y -= val;
-                if (corner.includes('b')) y += val;
-                
-                // Side corners
-                if (corner === 'leftside') x -= val;
-                if (corner === 'rightside') x += val;
+                current = applyOffsetModifier(current, val);
                 break;
-                
             case 'offsetx':
-                // Explicit horizontal adjustment
-                x += val;
+                current = applyOffsetXModifier(current, val);
                 break;
-
             case 'offsety':
-                // Explicit vertical adjustment
-                y += val;
-                break;
-                
+                current = applyOffsetYModifier(current, val);
+                break;           
             case 'at':
-                // Used for 'side' corners to specify position along the side.
-                // 'val' is assumed to be a ratio (0.0 to 1.0) or percentage (0 to 100, if not resolved).
-                if (corner.includes('side')) {
-                    // For vertical sides ('leftside', 'rightside'), 'at' specifies the Y position
-                    // Assume 'val' is 0 to 1 for fractional position.
-                    y = rect.top + (height * val);
-                } 
-                // Note: Horizontal sides ('topside', 'bottomside') would use width for X.
-                // Ignoring 'at' on corner points.
+                current = applyAtModifier(initial, rect, corner, val);
                 break;
+            default:
+                console.error("Unhandled modifier.", mod);
+                return null; 
         }
     });
 
-    return { x, y };
+    return current;
 }
 
-
-// Resolves an AST coordinate node into a concrete {x, y} point.
-// TODO: These really should return an ordered list of points.
-function resolveCoordinate(coord) {
-    if (coord.type === 'anon') {
-        // Anonymous point: return the last known point.
-        return lastPoint;
-    }
-
-    if (coord.type === 'element') {
-        const rect = getElementPosition(coord.id);
-        if (rect.width === 0 && rect.height === 0) {
-            console.warn(`Element #${coord.id} has zero size or is off-screen. Returning last point.`);
-            return lastPoint;
-        }
-        
-        // 1. Get the base corner coordinate
-        let { x: baseX, y: baseY } = calculateCorner(rect, coord.corner);
-        
-        // 2. Apply all modifiers (clip, offset, at)
-        // The applyModifiers is assumed to return a single point {x, y} for this context.
-        const resolvedPoint = applyModifiers(baseX, baseY, rect, coord.corner, coord.modifiers);
-        
-        return resolvedPoint;
+/**
+ * Resolves an AST coordinate node into a list of points.
+ *
+ * @param {Object} coord - The coordinate AST node.
+ * @returns {{x: number, y: number} | null} The resolved point or null (for 'anon').
+ * TODO: rename to resolveCoordinate once usage is migrated.
+ */
+function resolveCoordinates(coord) {
+    // Check if coord object itself is valid before accessing .type
+    if (!coord || !coord.type) {
+        console.error("Invalid coordinate node passed to resolveCoordinate.");
+        return null; 
     }
     
-    // Should not happen if grammar is correct
-    console.warn(`Unknown coordinate type '${coord.type}'. Returning last point.`);
-    return lastPoint;
+    switch (coord.type) {
+        case 'anon':
+            return [
+                {
+                    type: 'halfplane_constrained',
+                    // Unconstrained in practice.
+                    halfplanes: [],
+                },
+            ];
+
+        case 'element': {
+            // TODO: Handle circular elements.
+            const rect = getElementPosition(coord.id);
+            if (rect.width === 0 && rect.height === 0) {
+                console.error(`Element #${coord.id} has zero size or is off-screen.`);
+                return;
+            }
+
+            switch (coord.corner) {
+            case "tl":
+            case "tr":
+            case "bl":
+            case "br":
+                return applyModifiers([calculateCorner(rect, coord.corner)], rect, coord.corner, coord.modifiers);
+            case "leftside":
+            case "rightside":
+                console.error(`TODO: Can't support sides yet.`);
+                return null;
+            case null:
+                const corners = ['tl', 'tr', 'br', 'bl'];
+                return corners.flatMap(corner => {
+                    return applyModifiers([calculateCorner(rect, corner)], rect, corner, coord.modifiers);
+                });
+            default:
+                console.error(`TODO: Default`);
+                return null;
+            }
+        }
+
+        default:
+            // Should not happen if grammar is correct
+            console.error(`Unknown coordinate type '${coord.type}'.`);
+            return;
+    }
 };
 
 /**
@@ -180,29 +390,51 @@ function generateSvgPath(ast) {
         const { command } = commandNode;
 
         if (command === 'M' || command === 'L') {
-            const point = resolveCoordinate(commandNode.coordinate);
-            svgPathData.push(`${command} ${point.x},${point.y}`);
-            // Global/scoped lastPoint must be updated outside the function or passed by reference if strict scoping is used
-            // For this implementation, we assume `lastPoint` is mutable and scoped.
-            lastPoint = { x: point.x, y: point.y }; 
+            const points = resolveCoordinates(commandNode.coordinate);
+            // TODO: Reverse only if points are in the wrong order.
+            points.reverse();
+            const firstPoint = points[0].point;
+            svgPathData.push(`${command} ${firstPoint.x},${firstPoint.y}`);
+            
+            // LineTo the remaining corners
+            for (let i = 1; i < points.length; i++) {
+                const point = points[i].point;
+                svgPathData.push(`L ${point.x},${point.y}`);
+            }
+            lastPoint = points[points.length - 1]; 
 
         } else if (command === 'H') {
+            // TODO: Implement better.
             // The 'assert' becomes a runtime check
             if (!lastPoint) { console.error("H command requires a previous point."); return; }
 
-            const point = resolveCoordinate(commandNode.coordinate);
-            svgPathData.push(`${command} ${point.x}`);
-            lastPoint.x = point.x;
-            // Y is unchanged
+            const points = resolveCoordinates(commandNode.coordinate);
 
+            const firstPoint = points[0].point;
+            svgPathData.push(`H ${firstPoint.x}`);
+            
+            // LineTo the remaining corners
+            for (let i = 1; i < points.length; i++) {
+                const point = points[i].point;
+                svgPathData.push(`L ${point.x},${point.y}`);
+            }
+            lastPoint = points[points.length - 1]; 
         } else if (command === 'V') {
-            if (!lastPoint) { console.error("V command requires a previous point."); return; }
+            // TODO: Implement better.
+            // The 'assert' becomes a runtime check
+            if (!lastPoint) { console.error("H command requires a previous point."); return; }
 
-            const point = resolveCoordinate(commandNode.coordinate);
-            svgPathData.push(`${command} ${point.y}`);
-            lastPoint.y = point.y;
-            // X is unchanged
+            const points = resolveCoordinates(commandNode.coordinate);
 
+            const firstPoint = points[0].point;
+            svgPathData.push(`V ${firstPoint.y}`);
+            
+            // LineTo the remaining corners
+            for (let i = 1; i < points.length; i++) {
+                const point = points[i].point;
+                svgPathData.push(`L ${point.x},${point.y}`);
+            }
+            lastPoint = points[points.length - 1]; 
         } else if (command === 'Z') {
             svgPathData.push('Z');
             // In standard SVG, 'Z' implicitly closes the subpath, moving the current point
@@ -212,34 +444,23 @@ function generateSvgPath(ast) {
             // TODO: Assert no following command.
 
         } else if (command === 'O') {
+            // Draw a closed path around the perimeter of the provided element.
             const { id } = commandNode.element;
             if (lastPoint) { console.error("O command requires no previous point exists."); return; }
 
-            // The original logic seems to use 'O' to draw a path *around* the element's four corners.
-            // This is a custom command, so its interpretation is based on the pseudocode.
-            
-            // The array of corners to resolve
-            const corners = ['tl', 'tr', 'br', 'bl']; // Added 'bl' and changed order for a standard rectangle path
-            
+            const points = resolveCoordinates(commandNode.element);
+            console.log("RESOLVED resolveCoordinates", points);
+
+            // TODO: ENSURE ALL POINTS ARE EXPLICIT.
+            // TODO: ENSURE AT LEAST TWO ?THREE? POINTS
+                        
             // The starting point (MoveTo)
-            const firstPoint = resolveCoordinate({
-                'type': "element",
-                id: id,
-                corner: corners[0],
-                modifiers: commandNode.element.modifiers,
-            });
+            const firstPoint = points[0].point;
             svgPathData.push(`M ${firstPoint.x},${firstPoint.y}`);
             
             // LineTo the remaining corners
-            for (let i = 1; i < corners.length; i++) {
-                const corner = corners[i];
-                console.log(commandNode);
-                const point = resolveCoordinate({
-                    'type': "element",
-                    id: id,
-                    corner: corner,
-                    modifiers: commandNode.element.modifiers,
-                });
+            for (let i = 1; i < points.length; i++) {
+                const point = points[i].point;
                 svgPathData.push(`L ${point.x},${point.y}`);
             }
             
@@ -256,32 +477,20 @@ function generateSvgPath(ast) {
     return svgPathData.join(' ');
 };
 
-function test_trace_parser() {
 
-    const color = 'blue';
-    const strokeWidth = 2;
-
+function updateTraces() {
     const svg = document.getElementById('trace-overlay');
-    const pathId = `test_trace_parser`;
+    if (!svg) {
+        return;
+    }
 
-    const pathString = `
-    M #mainframe.tr
-    L #mainframe.tl.clip(20)
-    L #mainframe.bl.clip(4)
-    L #statusbox.br
-    L #bl-graph.br
-    `;
+    const renderedPathIds = new Set();
 
-    /*const pathString = `
-    O #mainframe.tl.clip(20)
-    `;*/
-
-    try {
-        const pathAST = parse(pathString.trim());
-        console.log("Parsed AST (Mock):", pathAST);
+    traceInstances.forEach(({ pathstring, options }, traceId) => {
+        const { color = 'blue', strokeWidth = 2 } = options;
         
-        // Convert the AST into the final SVG path string
-        const finalPathD = generateSvgPath(pathAST);
+        const pathId = `trace-${traceId}`;
+        renderedPathIds.add(pathId);
 
         let path = document.getElementById(pathId);
         if (!path) {
@@ -291,17 +500,44 @@ function test_trace_parser() {
             path.setAttribute('pointer-events', 'none');
             svg.appendChild(path);
         }
-        
-        // Now you can apply this to your SVG path element
-        // document.getElementById('my-svg-path').setAttribute('d', finalPathD);
-        console.log("SVG d attribute value:", finalPathD);
 
-        path.setAttribute('d', finalPathD.trim());
+        const pathAST = parse(pathstring.trim());
+        
+        // Convert the AST into the final SVG path string
+        const computedPath = generateSvgPath(pathAST);
+
+        path.setAttribute('d', computedPath.trim());
         path.setAttribute('stroke', color);
         path.setAttribute('stroke-width', strokeWidth);
-        console.log(path);
+    });
 
-    } catch (error) {
-        console.error("Parsing Error:", error.message);
+    /* TODO: Renable. const existingPaths = svg.querySelectorAll('path');
+    existingPaths.forEach(path => {
+        // TODO: Remove this hack which is in place for testing.
+        if (!renderedPathIds.has(path.id) && path.id != 'test_trace_parser') {
+            path.remove();
+        }
+    });*/
+}
+
+// Public functions for module
+function addTrace(pathstring, traceId, options = {}) {
+    traceInstances.set(traceId, {
+        pathstring,
+        options
+    });
+
+    updateTraces();
+}
+
+function removeTrace(traceId) {
+    if (traceInstances.has(traceId)) {
+        traceInstances.delete(traceId);
+        updateTraces();
     }
+}
+
+function clearAllTraces() {
+    traceInstances.clear();
+    updateTraces();
 }

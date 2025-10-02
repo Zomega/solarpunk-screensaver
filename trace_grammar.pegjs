@@ -48,12 +48,14 @@ AnonPoint "_"
 
 // An element reference, e.g., #lbar.tr.clip(20)
 ElementRef
-  = "#" element_id:Identifier "." corner:Corner modifiers:(Modifier)* { return { 
+  = "#" element_id:Identifier corner:( "." Corner )? modifiers:(Modifier)* { 
+      return { 
         type: 'element', 
         id: element_id, 
-        corner: corner, 
-        modifiers: modifiers // PEG.js will now pass this as the 3rd argument
-    }; }
+        corner: corner ? corner[1] : null, 
+        modifiers: modifiers
+      }; 
+    }
 
 // Defines a corner: tl, tr, bl, br, leftside, rightside
 Corner
