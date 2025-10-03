@@ -149,8 +149,6 @@
       padding-left: 4px;      
       overflow: hidden;
       text-align: justify;
-      border: 2px solid #3bffda;
-      border-right: none;
       line-height: 13px;
       font-weight: bold;
 
@@ -420,7 +418,14 @@
   )*/
 
   addTrace('O #bl-graph.clip(20)', 'foo3',  { color: '#3bffda', strokeWidth: 2 });
-  addTrace('O #br-graph.clip(8)', 'foo4',  { color: '#3bffda', strokeWidth: 2 });
+  // TODO: The last command is brittle. Should be H #right.rightside once that's supported
+  addTrace(`
+    M #br-graph.tl.offsety(8)
+    L #br-graph.bl.clip(4)
+    L #br-graph.br.clip(4)
+    L #br-graph.tr.clip(8)
+    L #br-graph.tl.offsetx(-45)
+  `, 'foo4',  { color: '#3bffda', strokeWidth: 2 });
   addTrace('O #bcl-graph', 'foo5',  { color: '#3bffda', strokeWidth: 2 });
   addTrace('O #bcr-graph', 'foo6',  { color: '#3bffda', strokeWidth: 2 });
   addTrace(`
@@ -429,8 +434,30 @@
     L #worldmap.bl.clip(8)
     L #worldmap.br
     `, 'foo7',  { color: '#3bffda', strokeWidth: 2 });
-  addTrace('O #dollarsigngreeblie.clip(2)', 'foo8',  { color: '#3bffda', strokeWidth: 2 });
-  addTrace('O #r-progbar2.clip(2)', 'foo9',  { color: '#3bffda', strokeWidth: 2 });
+  addTrace('O #dollarsigngreeblie.clip(4)', 'foo8',  { color: '#3bffda', strokeWidth: 2 });
+  addTrace('O #r-progbar2.clip(4)', 'foo9',  { color: '#3bffda', strokeWidth: 2 });
+
+  // TODO: r-progbar is really awkwardly sized, we should use padding and margin more?
+  // TODO: We should really use at(%) for the first command (also the fade out?)
+  // TODO: We should really use H #ring.rightside for the last command
+  addTrace(`
+    M #r-progbar.tr.offsety(30).offsetx(-70)
+    L #r-progbar.tl.offsety(30).clip(20)
+    L #r-progbar.bl.offsety(-20)
+    L #r-progbar.br.offsety(-20).clip(8)
+    L #r-progbar.tr.offsety(15)
+    L #r-progbar.tl.offsety(15).offsetx(-30).clip(40)
+    L #r-progbar.tl.offsety(55).offsetx(-30).offsetx(-20)
+    `, 'foo10',  { color: '#3bffda', strokeWidth: 2 });
+
+  // TODO: Use of offsetx here is not responsive. Should use H #ring somehow.
+  addTrace(`
+    M #righttext.tr
+    L #righttext.tl.offsetx(-110).clip(10)
+    M #righttext.tl
+    L #righttext.bl
+    L #righttext.br
+    `, 'foo11',  { color: '#3bffda', strokeWidth: 2 });
   </script>
 
     <script type="module">

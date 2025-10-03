@@ -191,7 +191,7 @@ function applyOffsetModifier(initial, val) {
     });
 }
 
-function applyOffsetXModifier(initial, amount) {
+function applyOffsetXModifier(initial, val) {
     console.log("PRE-offsetx", initial);
     let x = initial[0].point.x;
     let y = initial[0].point.y;
@@ -200,14 +200,14 @@ function applyOffsetXModifier(initial, amount) {
     x += val;
     return [
         {
-            type: 'explicit',
+            ...initial[0], // Spread existing properties (like type)
             point: { x, y },
         }
     ];
 }
 
 
-function applyOffsetYModifier(initial, amount) {
+function applyOffsetYModifier(initial, val) {
     console.log("PRE-offsety", initial);
     let x = initial[0].point.x;
     let y = initial[0].point.y;
@@ -216,13 +216,13 @@ function applyOffsetYModifier(initial, amount) {
     y += val;
     return [
         {
-            type: 'explicit',
+            ...initial[0], // Spread existing properties (like type)
             point: { x, y },
         }
     ];
 }
 
-function applyAtModifier(initial, rect, corner, amount) {
+function applyAtModifier(initial, rect, corner, val) {
     console.log("PRE-at", initial);
     let x = initial[0].point.x;
     let y = initial[0].point.y;
@@ -501,9 +501,11 @@ function updateTraces() {
             svg.appendChild(path);
         }
 
+        // TODO: We should parse this in advance.
         const pathAST = parse(pathstring.trim());
         
         // Convert the AST into the final SVG path string
+        // TODO: We should cache parts of this if possible?
         const computedPath = generateSvgPath(pathAST);
 
         path.setAttribute('d', computedPath.trim());

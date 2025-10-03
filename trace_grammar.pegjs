@@ -94,7 +94,7 @@ Percent
 
 // A number (integer or decimal)
 Number
-  = text:(([0-9]+ ("." [0-9]+)?)) { return parseFloat(text.flat().join('')); }
+  = text:(("-"? [0-9]+ ("." [0-9]+)?)) { return parseFloat(text.flat().join('')); }
 
 // An identifier for an element (source: 2, 3, 4, 5)
 Identifier
