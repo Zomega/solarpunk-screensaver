@@ -426,16 +426,55 @@
     L #br-graph.tr.clip(8)
     L #br-graph.tl.offsetx(-45)
   `, 'foo4',  { color: '#3bffda', strokeWidth: 2 });
-  addTrace('O #bcl-graph', 'foo5',  { color: '#3bffda', strokeWidth: 2 });
-  addTrace('O #bcr-graph', 'foo6',  { color: '#3bffda', strokeWidth: 2 });
+
+  // TODO: Last two commands are brittle should H #ring.leftside.
   addTrace(`
-    M #worldmap.tr
+    O #bcl-graph.clip(4)
+    M #bcl-graph.tr.offsety(-20).offsetx(-47).offsetx(-8)
+    L #bcl-graph.tl.offsety(-20)
+    M #bcl-graph.tr.offsety(-40).offsetx(-70).offsetx(-8)
+    L #bcl-graph.tl.offsety(-40)
+    `, 'foo5',  { color: '#3bffda', strokeWidth: 2 });
+
+  addTrace(`
+    M #bottom-dot-greeblies.tl.offsety(-10)
+    L #bottom-dot-greeblies.tr.offsety(-10)
+    `, 'bottomlinetrace',  { color: '#3bffda', strokeWidth: 2 });
+
+    // TODO: Use V #ring.topside
+    addTrace(`
+    M #top-dot-greeblies.tr.offsetx(10).offsety(5)
+    L #top-dot-greeblies.br.offsetx(10).offsety(40)
+    `, 'topdotlinetrace',  { color: '#3bffda', strokeWidth: 2 });
+
+    // TODO: Last two commands are brittle should H #ring.rightside.
+    addTrace(`
+    O #bcr-graph.clip(4)
+    M #bcr-graph.tr.offsety(-20)
+    L #bcr-graph.tl.offsety(-20).offsetx(15).offsetx(8)
+    M #bcr-graph.tr.offsety(-40)
+    L #bcr-graph.tl.offsety(-40).offsetx(40).offsetx(8)
+    `, 'foo6',  { color: '#3bffda', strokeWidth: 2 });
+  
+  // TODO: The first and last commands should really be referenced to #ring once supported.
+  addTrace(`
+    M #worldmap.tr.offsetx(-10)
     L #worldmap.tl.clip(8)
     L #worldmap.bl.clip(8)
-    L #worldmap.br
+    L #worldmap.br.offsetx(25)
     `, 'foo7',  { color: '#3bffda', strokeWidth: 2 });
   addTrace('O #dollarsigngreeblie.clip(4)', 'foo8',  { color: '#3bffda', strokeWidth: 2 });
-  addTrace('O #r-progbar2.clip(4)', 'foo9',  { color: '#3bffda', strokeWidth: 2 });
+
+  // TODO: USE An anon point for the corner of the second path.
+  addTrace(`
+    M #r-progbar2.bl
+    L #r-progbar2.br.clip(4)
+    L #r-progbar2.tr.clip(4)
+    L #r-progbar2.tl
+    M #r-progbar2.tl.offsetx(-20)
+    L #r-progbar2.bl.offsetx(-20).offsety(30)
+    L #ring.rightside.offsetx(-6)
+    `, 'foo9',  { color: '#3bffda', strokeWidth: 2 });
 
   // TODO: r-progbar is really awkwardly sized, we should use padding and margin more?
   // TODO: We should really use at(%) for the first command (also the fade out?)
@@ -458,6 +497,19 @@
     L #righttext.bl
     L #righttext.br
     `, 'foo11',  { color: '#3bffda', strokeWidth: 2 });
+
+  addTrace(`
+    M #statusbox.tr.offsetx(-45)
+    L #statusbox.tr
+    L #statusbox.br
+    L #statusbox.bl
+    L #statusbox.tl
+    L #statusbox.tl.offsetx(45)
+    M #statusbox.tr.offsetx(-25).offsety(16)
+    L #statusbox.topside.offsetx(30).offsety(16).offsetx(4)
+    L #statusbox.topside.offsetx(30).offsety(8).offsetx(-4)
+    L #statusbox.tl.offsetx(25).offsety(8)
+    `, 'foo12',  { color: '#3bffda', strokeWidth: 2 });
   </script>
 
     <script type="module">

@@ -68,7 +68,16 @@ function calculateCorner(rect, corner) {
             point: { x: rect.right, y: rect.top + rect.height / 2 },
             corner: 'rightside',
         };
-        // TODO: Add top/bottom side centers if needed
+        case 'topside': return {
+            type: 'explicit',
+            point: { x: rect.left + rect.width / 2, y: rect.top },
+            corner: 'topside',
+        };
+        case 'bottomside': return {
+            type: 'explicit',
+            point: { x: rect.left + rect.width / 2, y: rect.bottom },
+            corner: 'bottomside',
+        };
         default: 
             console.error("Unhandled corner.", corner);
             return null; 
@@ -334,8 +343,10 @@ function resolveCoordinates(coord) {
                 return applyModifiers([calculateCorner(rect, coord.corner)], rect, coord.corner, coord.modifiers);
             case "leftside":
             case "rightside":
-                console.error(`TODO: Can't support sides yet.`);
-                return null;
+            case "topside":
+            case "bottomside":
+                // TODO: Maybe better support?
+                return applyModifiers([calculateCorner(rect, coord.corner)], rect, coord.corner, coord.modifiers);
             case null:
                 const corners = ['tl', 'tr', 'br', 'bl'];
                 return corners.flatMap(corner => {

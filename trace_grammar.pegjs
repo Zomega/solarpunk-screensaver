@@ -59,7 +59,7 @@ ElementRef
 
 // Defines a corner: tl, tr, bl, br, leftside, rightside
 Corner
-  = "tl" / "tr" / "bl" / "br" / "leftside" / "rightside"
+  = "tl" / "tr" / "bl" / "br" / "leftside" / "rightside" / "topside" / "bottomside"
 
 // === MODIFIERS ===
 
