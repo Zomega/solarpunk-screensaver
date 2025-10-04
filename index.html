@@ -29,19 +29,19 @@
       padding-top: 16px; /*TODO: consider unifying.*/
 
       display: grid;
-      grid-template-columns: 260px 140px 1fr 46px 60px 32px 200px;
+      grid-template-columns: 260px 140px 1fr 46px 60px 248px;
       grid-template-rows: 24px 68px 1fr 1fr 85px 37px 32px;
       grid-column-gap: 16px;
       grid-row-gap: 16px;
 
       grid-template-areas:
-        "tl-label tl-label  .                    .         statusbox statusbox           statusbox"
-        "barchart .         .                    .         statusbox statusbox           statusbox"
-        "lefttext .         .                    .         .         .                   rightbox"
-        "worldmap .         .                    .         .         right-dot-greeblies r-progbar"
-        "bl-graph .         .                    .         .         br-panel            br-panel"
-        "bl-graph bcl-graph .                    bcr-graph bcr-graph br-panel            br-panel"
-        "bl-graph bcl-graph bottom-dot-greeblies bcr-graph bcr-graph br-panel            br-panel";
+        "tl-label tl-label           .                    .         statusbox statusbox"
+        "leftbox .                   .                    .         statusbox statusbox"
+        "leftbox .                   .                    .         .         rightbox"
+        "worldmap .                  .                    .         .         rightbox"
+        "bl-graph .                  .                    .         .         rightbox"
+        "bl-graph bcl-graph          .                    bcr-graph bcr-graph rightbox"
+        "bl-graph bcl-graph          bottom-dot-greeblies bcr-graph bcr-graph rightbox";
     }
 
     #statusbox {
@@ -87,12 +87,24 @@
         filter: drop-shadow(0 0 4px #3bffdacc);
     }
 
-    #right-dot-greeblies {            
-        position: absolute;
-        right: 240px;
-        bottom: 230px;
-        width: 32px;
-        height: 80px;
+    #right-dot-greeblies {
+        grid-area: right-dot-greeblies;
+        object-fit: fill;
+        height: 100%;
+        width: 100%;
+
+        --grid-spacing: 24;
+        --dot-radius: 2.5;
+        --dot-color: #3bffda;
+        filter: drop-shadow(0 0 4px #3bffdacc);
+    }
+
+    #left-dot-greeblies {
+        grid-area: left-dot-greeblies;
+        object-fit: fill;
+        height: 100%;
+        width: 100%;
+
         --grid-spacing: 24;
         --dot-radius: 2.5;
         --dot-color: #3bffda;
@@ -104,24 +116,25 @@
 
       object-fit: fill;
       height: 100%;
-      /* TODO: This might be better achived with a right margin */
-      width: 210px;
+      width: 100%;
     }
 
     #lefttext {
-        grid-area: lefttext;
+      grid-area: lefttext;
 
-        padding: 0;
-        padding-right: 4px;
-        margin: 0;
-        /* TODO: This might be better achived with a right margin */
-        width: 185px;
+      padding: 0;
+      padding-right: 4px;
+      margin: 0;
 
-        font-size: 8px;  
-        overflow: hidden;
-        text-align: justify;
-        line-height: 13px;
-        font-weight: bold;
+      object-fit: fill;
+      height: 100%;
+      width: 100%;
+
+      font-size: 8px;
+      overflow: hidden;
+      text-align: justify;
+      line-height: 13px;
+      font-weight: bold;
     }
 
 
@@ -130,30 +143,52 @@
 
       margin: 0;
       padding: 0;
+      padding-top: 20px;
 
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: 1fr 40px;
+      grid-template-columns: 32px 1fr 1fr;
+      grid-template-rows: 70px 40px 1fr 80px 1fr 40px;
       grid-column-gap: 16px;
       grid-row-gap: 16px;
 
       grid-template-areas:
-        "righttext dollarsigngreeblie"
-        "r-progbar2 r-progbar2";
+        ".                   righttext      dollarsigngreeblie"
+        ".                   r-progbar2     r-progbar2"
+        ".                   r-progbar      r-progbar"
+        "right-dot-greeblies r-progbar      r-progbar"
+        "br-graph            br-graph       br-graph"
+        "br-percentages      br-percentages br-line-greeblie";
+    }
+
+    #leftbox {
+        grid-area: leftbox;
+        margin: 0;
+        padding: 0;
+        margin-top: -16px;
+        padding-right: 8px;
+        display: grid;
+        grid-template-columns: 1fr 20px 24px;
+        grid-template-rows: 80px 1fr;
+        grid-column-gap: 16px;
+        grid-row-gap: 16px;
+        grid-template-areas:
+          "barchart barchart ."
+          "lefttext .        left-dot-greeblies";
     }
 
     #righttext {
       grid-area: righttext;
 
+      object-fit: fill;
+      width: 100%;
+      height: 100%;
+
       font-size: 8px;
-      padding-left: 4px;      
+      padding-left: 4px;
       overflow: hidden;
       text-align: justify;
       line-height: 13px;
       font-weight: bold;
-
-      /* TODO WHY DOES IT DO THIS? DO WE NEED A WRAPPER?*/
-      height: 96px;
 
       filter: drop-shadow(0 0 4px #3bffdacc);
     }
@@ -208,22 +243,6 @@
         height: 100%;
     }
 
-    #br-panel {
-      grid-area: br-panel;
-
-      margin: 0;
-      padding: 0;
-
-      display: grid;
-      grid-template-columns: 1fr 80px;
-      grid-template-rows: 1fr 40px;
-      grid-column-gap: 16px;
-      grid-row-gap: 16px;
-
-      grid-template-areas:
-        "br-graph  br-graph"
-        "br-percentages br-line-greeblie";
-    }
     #br-graph {
         grid-area: br-graph;
 
@@ -290,7 +309,7 @@
 <body>
   <svg width="0" height="0">
     <filter id="tint" color-interpolation-filters="sRGB">
-      <!-- TODO: This probably needs a rework to produce the correct -->
+      <!-- TODO: This probably needs a rework to produce the correct effect -->
       <feColorMatrix id="tintMatrix" type="matrix" values=""/>
       <feComponentTransfer>
         <feFuncA type="identity"/>
@@ -300,9 +319,12 @@
   <div id="mainframe">
     <!-- Left Column -->
     <div id="tl-label">Dashboard</div>
-    <img id="barchart" src="graph6_placeholder.svg" alt="Graph6 Placeholder" draggable="false">
-    <div id="lefttext">
-      Executing system log protocol 731-C. Local time 14:41:02. Active unit designation: Locus Alpha. Operational readiness: Green. All primary sub-systems nominal. Power core output at 98.4%, reserves holding steady. Data uplink synchronized. Atmospheric particulate density 12.7%, humidity 44%, barometric pressure 1012 millibars. External visual feeds show low-light conditions with significant atmospheric haze. Threat assessment probability elevated to 47.3% based on recent thermal anomalies and faint signal detection. System log entry: Targeting system reports biometrics scan inconclusive. Target signature identified as non-standard organic, classification pending. Proximity alert at 750 meters. System status: Active engagement protocol not initiated. Awaiting confirmation from central command. All local sensors are operating within established parameters. Bio-signs within the immediate zone are 0.0, outside of operational unit. Passive scan for additional hostiles continues on loop. Communication channel remains open, encrypted traffic detected on 1.4 GHz band, decryption progress: 4%. Visual feed [CAM-03] shows movement at a distance of 1.2 kilometers, classification unresolved, possibly non-threat wildlife. Main weapon systems are armed and in standby mode. Energy output for the personal field generator is stable at 99.8%. No internal system errors detected. Awaiting further instruction. Awaiting further instruction. Awaiting further instruction.
+    <div id="leftbox">
+      <img id="barchart" src="graph6_placeholder.svg" alt="Graph6 Placeholder" draggable="false">
+      <div id="lefttext">
+        Executing system log protocol 731-C. Local time 14:41:02. Active unit designation: Locus Alpha. Operational readiness: Green. All primary sub-systems nominal. Power core output at 98.4%, reserves holding steady. Data uplink synchronized. Atmospheric particulate density 12.7%, humidity 44%, barometric pressure 1012 millibars. External visual feeds show low-light conditions with significant atmospheric haze. Threat assessment probability elevated to 47.3% based on recent thermal anomalies and faint signal detection. System log entry: Targeting system reports biometrics scan inconclusive. Target signature identified as non-standard organic, classification pending. Proximity alert at 750 meters. System status: Active engagement protocol not initiated. Awaiting confirmation from central command. All local sensors are operating within established parameters. Bio-signs within the immediate zone are 0.0, outside of operational unit. Passive scan for additional hostiles continues on loop. Communication channel remains open, encrypted traffic detected on 1.4 GHz band, decryption progress: 4%. Visual feed [CAM-03] shows movement at a distance of 1.2 kilometers, classification unresolved, possibly non-threat wildlife. Main weapon systems are armed and in standby mode. Energy output for the personal field generator is stable at 99.8%. No internal system errors detected. Awaiting further instruction. Awaiting further instruction. Awaiting further instruction.
+      </div>
+      <svg id="left-dot-greeblies" class="greeblie-dot-grid"></svg>
     </div>
     <img id="worldmap" src="world_map.svg" alt="World Map" draggable="false">
     <img id="bl-graph" src="graph2_placeholder.svg" alt="Graph2 Placeholder" draggable="false">
@@ -324,17 +346,15 @@
       </div>
       <div id="dollarsigngreeblie"></div>
       <div id="r-progbar2"></div>
-    </div>
-    <svg id="right-dot-greeblies" class="greeblie-dot-grid"></svg>
-    <img id="r-progbar" src="graph5_placeholder.svg" alt="Graph5 Placeholder" draggable="false">
-    <div id="br-panel">
+      <svg id="right-dot-greeblies" class="greeblie-dot-grid"></svg>
+      <img id="r-progbar" src="graph5_placeholder.svg" alt="Graph5 Placeholder" draggable="false">
       <img id="br-graph" src="graph1_placeholder.svg" alt="Graph1 Placeholder" draggable="false">
       <div id=br-percentages>60%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20%</div>
     </div>
   </div>
 
-  <!-- TODO: Integrate inside mainframe -->
-  <img id="ring" src="screensaver-ring.svg" alt="Ring" draggable="false">
+  <!-- TODO: Integrate inside mainframe? Dynamic resizing? -->
+  <img id="ring" class="greeblie-shape-circle" src="screensaver-ring.svg" alt="Ring" draggable="false">
 
   <svg id="trace-overlay" xmlns="http://www.w3.org/2000/svg"></svg>
   <img id="gradient-overlay" src="screensaver-overlay.svg" alt="Overlay">
@@ -455,7 +475,7 @@
     M #bcr-graph.tr.offsety(-40)
     L #bcr-graph.tl.offsety(-40).offsetx(40).offsetx(8)
     `, 'foo6',  { color: '#3bffda', strokeWidth: 2 });
-  
+
   // TODO: The first and last commands should really be referenced to #ring once supported.
   addTrace(`
     M #worldmap.tr.offsetx(-10)
@@ -492,7 +512,7 @@
   // TODO: Use of offsetx here is not responsive. Should use H #ring somehow.
   addTrace(`
     M #righttext.tr
-    L #righttext.tl.offsetx(-110).clip(10)
+    L #righttext.tl.offsetx(-95).clip(10)
     M #righttext.tl
     L #righttext.bl
     L #righttext.br
@@ -510,6 +530,26 @@
     L #statusbox.topside.offsetx(30).offsety(8).offsetx(-4)
     L #statusbox.tl.offsetx(25).offsety(8)
     `, 'foo12',  { color: '#3bffda', strokeWidth: 2 });
+
+    // TODO: Should really using H #ring.rightside at the end.
+    // TODO: Maybe use the dot greeblies to define the corner in a responsive way?
+    addTrace(`
+    M #lefttext.rightside
+    L #lefttext.rightside.offsetx(20)
+    L #lefttext.tr.offsetx(20)
+    L #barchart.br.offsetx(35).offsety(-10)
+    L #barchart.rightside.offsetx(35)
+    L #barchart.rightside.offsetx(160)
+
+    M #lefttext.br
+    L #lefttext.br.offsetx(60)
+
+    M #barchart.rightside.offsety(-25).offsetx(65)
+    L #barchart.rightside.offsety(-25).offsetx(190)
+
+    M #barchart.rightside.offsety(-50).offsetx(65)
+    L #barchart.rightside.offsety(-50).offsetx(190)
+    `, 'foo13',  { color: '#3bffda', strokeWidth: 2 });
   </script>
 
     <script type="module">
@@ -518,7 +558,7 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             const dotGridSVGs = document.querySelectorAll(".greeblie-dot-grid");
-            
+
             // Loop through each SVG and draw its grid
             dotGridSVGs.forEach(drawDotGrid);
 
