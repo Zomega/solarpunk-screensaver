@@ -1,0 +1,16 @@
+{
+  "name": "solarpunk-screensaver",
+  "version": "1.0.0",
+  "main": "dot_greeblies.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "prettier": "^3.8.1"
+  }
+}
