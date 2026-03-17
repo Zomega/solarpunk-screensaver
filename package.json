@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "dot_greeblies.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest",
     "format": "prettier --write ."
   },
   "keywords": [],
@@ -11,6 +11,12 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "prettier": "^3.8.1"
+    "@stryker-mutator/core": "^9.6.0",
+    "@stryker-mutator/javascript-mutator": "^4.0.0",
+    "@stryker-mutator/vitest-runner": "^9.6.0",
+    "@vitest/coverage-v8": "^4.1.0",
+    "happy-dom": "^20.8.4",
+    "prettier": "^3.8.1",
+    "vitest": "^4.1.0"
   }
 }

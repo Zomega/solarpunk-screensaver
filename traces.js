@@ -545,13 +545,13 @@ function updateTraces() {
     path.setAttribute('stroke-width', strokeWidth);
   });
 
-  /* TODO: Renable. const existingPaths = svg.querySelectorAll('path');
+    const existingPaths = svg.querySelectorAll('path');
     existingPaths.forEach(path => {
         // TODO: Remove this hack which is in place for testing.
         if (!renderedPathIds.has(path.id) && path.id != 'test_trace_parser') {
             path.remove();
         }
-    });*/
+    });
 }
 
 // Public functions for module
