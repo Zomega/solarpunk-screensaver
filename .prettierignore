@@ -1,0 +1,5 @@
+# Ignore reference files
+reference/
+
+# Ignore videos
+*.mp4

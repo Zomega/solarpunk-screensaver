@@ -1,50 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Screensaver Scratchpad</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: "Roboto", sans-serif;
-      color: #3bffda;
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: #028366ff;
-      text-transform: uppercase;
-    }
-    #mainframe {
-      position: fixed;
-      left: auto;
-      top: auto;
-      /* TODO: This should be dynamic. For right now it's fixed to help match the layout. */
-      width: calc(1110px - 48px);
-      height: calc(694px - 48px);
-      padding: 24px;
-      padding-top: 16px; /*TODO: consider unifying.*/
+  <head>
+    <meta charset="UTF-8" />
+    <title>Screensaver Scratchpad</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: 'Roboto', sans-serif;
+        color: #3bffda;
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #028366ff;
+        text-transform: uppercase;
+      }
+      #mainframe {
+        position: fixed;
+        left: auto;
+        top: auto;
+        /* TODO: This should be dynamic. For right now it's fixed to help match the layout. */
+        width: calc(1110px - 48px);
+        height: calc(694px - 48px);
+        padding: 24px;
+        padding-top: 16px; /*TODO: consider unifying.*/
 
-      display: grid;
-      grid-template-columns: 260px 140px 1fr 46px 60px 248px;
-      grid-template-rows: 24px 68px 1fr 1fr 85px 37px 32px;
-      grid-column-gap: 16px;
-      grid-row-gap: 16px;
+        display: grid;
+        grid-template-columns: 260px 140px 1fr 46px 60px 248px;
+        grid-template-rows: 24px 68px 1fr 1fr 85px 37px 32px;
+        grid-column-gap: 16px;
+        grid-row-gap: 16px;
 
-      grid-template-areas:
-        "tl-label tl-label           .                    .         statusbox statusbox"
-        "leftbox .                   .                    .         statusbox statusbox"
-        "leftbox .                   .                    .         .         rightbox"
-        "worldmap .                  .                    .         .         rightbox"
-        "bl-graph .                  .                    .         .         rightbox"
-        "bl-graph bcl-graph          .                    bcr-graph bcr-graph rightbox"
-        "bl-graph bcl-graph          bottom-dot-greeblies bcr-graph bcr-graph rightbox";
-    }
+        grid-template-areas:
+          'tl-label tl-label  .                    .         statusbox statusbox'
+          'leftbox  .         .                    .         statusbox statusbox'
+          'leftbox  .         .                    .         .         rightbox'
+          'worldmap .         .                    .         .         rightbox'
+          'bl-graph .         .                    .         .         rightbox'
+          'bl-graph bcl-graph .                    bcr-graph bcr-graph rightbox'
+          'bl-graph bcl-graph bottom-dot-greeblies bcr-graph bcr-graph rightbox';
+      }
 
-    #tl-label {
+      #tl-label {
         grid-area: tl-label;
         padding: 0;
         font-size: 16px;
@@ -55,9 +58,9 @@
 
         display: flex;
         align-items: center;
-    }
+      }
 
-    #top-dot-greeblies {
+      #top-dot-greeblies {
         position: absolute;
         top: 18px;
         left: 650px;
@@ -67,9 +70,9 @@
         --dot-radius: 2;
         --dot-color: #3bffda;
         filter: drop-shadow(0 0 4px #3bffdacc);
-    }
+      }
 
-    #bottom-dot-greeblies {
+      #bottom-dot-greeblies {
         grid-area: bottom-dot-greeblies;
         object-fit: fill;
         height: 100%;
@@ -79,9 +82,9 @@
         --dot-radius: 2.5;
         --dot-color: #3bffda;
         filter: drop-shadow(0 0 4px #3bffdacc);
-    }
+      }
 
-    #right-dot-greeblies {
+      #right-dot-greeblies {
         grid-area: right-dot-greeblies;
         object-fit: fill;
         height: 100%;
@@ -91,9 +94,9 @@
         --dot-radius: 2.5;
         --dot-color: #3bffda;
         filter: drop-shadow(0 0 4px #3bffdacc);
-    }
+      }
 
-    #left-dot-greeblies {
+      #left-dot-greeblies {
         grid-area: left-dot-greeblies;
         object-fit: fill;
         height: 100%;
@@ -103,20 +106,20 @@
         --dot-radius: 2.5;
         --dot-color: #3bffda;
         filter: drop-shadow(0 0 4px #3bffdacc);
-    }
+      }
 
-    #barchart-img {
-      grid-area: barchart;
+      #barchart-img {
+        grid-area: barchart;
 
-      margin-top: 8px;
-      margin-bottom: 8px;
+        margin-top: 8px;
+        margin-bottom: 8px;
 
-      object-fit: fill;
-      height: 100%;
-      width: 100%;
-    }
+        object-fit: fill;
+        height: 100%;
+        width: 100%;
+      }
 
-    #barchart {
+      #barchart {
         grid-area: barchart;
         margin-top: 8px;
         margin-bottom: 8px;
@@ -128,58 +131,57 @@
         grid-template-rows: 1fr;
         grid-column-gap: 8px;
         grid-row-gap: 16px;
-        grid-template-areas: "barchart-chart barchart-line-greeblie";
-    }
+        grid-template-areas: 'barchart-chart barchart-line-greeblie';
+      }
 
-    #barchart-line-greeblie {
+      #barchart-line-greeblie {
         grid-area: barchart-line-greeblie;
         background-color: #0000ff66;
         object-fit: fill;
         margin: 12px 10px;
-    }
+      }
 
-    #lefttext {
-      grid-area: lefttext;
+      #lefttext {
+        grid-area: lefttext;
 
-      padding: 0;
-      padding-right: 4px;
-      margin: 0;
+        padding: 0;
+        padding-right: 4px;
+        margin: 0;
 
-      object-fit: fill;
-      height: 100%;
-      width: 100%;
+        object-fit: fill;
+        height: 100%;
+        width: 100%;
 
-      font-size: 8px;
-      overflow: hidden;
-      text-align: justify;
-      line-height: 13px;
-      font-weight: bold;
-    }
+        font-size: 8px;
+        overflow: hidden;
+        text-align: justify;
+        line-height: 13px;
+        font-weight: bold;
+      }
 
+      #rightbox {
+        grid-area: rightbox;
 
-    #rightbox {
-      grid-area: rightbox;
+        margin: 0;
+        padding: 0;
+        padding-top: 20px;
 
-      margin: 0;
-      padding: 0;
-      padding-top: 20px;
+        display: grid;
+        grid-template-columns: 32px 1fr 1fr;
+        grid-template-rows: 70px 40px 1fr 80px 1fr 40px;
+        grid-column-gap: 16px;
+        grid-row-gap: 16px;
 
-      display: grid;
-      grid-template-columns: 32px 1fr 1fr;
-      grid-template-rows: 70px 40px 1fr 80px 1fr 40px;
-      grid-column-gap: 16px;
-      grid-row-gap: 16px;
+        grid-template-areas:
+          '.                    righttext      dollarsigngreeblie'
+          '.                    r-progbar2     r-progbar2'
+          '.                    r-progbar      r-progbar'
+          'right-dot-greeblies r-progbar      r-progbar'
+          'br-graph            br-graph       br-graph'
+          'br-percentages      br-percentages br-line-greeblie';
+      }
 
-      grid-template-areas:
-        ".                   righttext      dollarsigngreeblie"
-        ".                   r-progbar2     r-progbar2"
-        ".                   r-progbar      r-progbar"
-        "right-dot-greeblies r-progbar      r-progbar"
-        "br-graph            br-graph       br-graph"
-        "br-percentages      br-percentages br-line-greeblie";
-    }
-
-    #leftbox {
+      #leftbox {
         grid-area: leftbox;
         margin: 0;
         padding: 0;
@@ -191,165 +193,165 @@
         grid-column-gap: 16px;
         grid-row-gap: 16px;
         grid-template-areas:
-          "barchart barchart ."
-          "lefttext .        left-dot-greeblies";
-    }
+          'barchart barchart .'
+          'lefttext .        left-dot-greeblies';
+      }
 
-    #statusbox {
-      padding: 20px;
-      padding-bottom: 10px;
-      grid-area: statusbox;
-      object-fit: fill;
-      width: calc(100% - 40px);
-      height: calc(100% -30px);
-      display: grid;
-      grid-template-columns: 1fr 80px;
-      grid-template-rows: 24px 1fr;
-      grid-column-gap: 4px;
-      grid-row-gap: 4px;
-      grid-template-areas:
-        "statustitle statustitle"
-        "statustext status-line-greeblie";
-    }
+      #statusbox {
+        padding: 20px;
+        padding-bottom: 10px;
+        grid-area: statusbox;
+        object-fit: fill;
+        width: calc(100% - 40px);
+        height: calc(100% -30px);
+        display: grid;
+        grid-template-columns: 1fr 80px;
+        grid-template-rows: 24px 1fr;
+        grid-column-gap: 4px;
+        grid-row-gap: 4px;
+        grid-template-areas:
+          'statustitle statustitle'
+          'statustext status-line-greeblie';
+      }
 
-    #statustitle {
+      #statustitle {
         grid-area: statustitle;
         font-weight: bold;
         font-size: 19px;
-    }
+      }
 
-    #statustext {
+      #statustext {
         grid-area: statustext;
         overflow: hidden;
         font-size: 10px;
-    }
+      }
 
-    #status-line-greeblie {
+      #status-line-greeblie {
         grid-area: status-line-greeblie;
         background-color: #0000ff66;
         margin-top: -16px;
         margin-left: 10px;
         margin-right: 10px;
-    }
+      }
 
-    #tl-label-line-greeblie {
-      background-color: #0000ff66;
-      display: inline-block;
-      height:12px;
-      width: 54px;
+      #tl-label-line-greeblie {
+        background-color: #0000ff66;
+        display: inline-block;
+        height: 12px;
+        width: 54px;
 
-      margin: auto 8px;
+        margin: auto 8px;
 
-      font-size: 10px;
-      line-height: 10px;
-    }
+        font-size: 10px;
+        line-height: 10px;
+      }
 
-    #br-line-greeblie {
-      grid-area: br-line-greeblie;
-      background-color: #0000ff66;
+      #br-line-greeblie {
+        grid-area: br-line-greeblie;
+        background-color: #0000ff66;
 
-      object-fit: fill;
-      width: 100%;
-      height: 100%;
-    }
+        object-fit: fill;
+        width: 100%;
+        height: 100%;
+      }
 
-    #righttext {
-      grid-area: righttext;
+      #righttext {
+        grid-area: righttext;
 
-      object-fit: fill;
-      width: 100%;
-      height: 100%;
+        object-fit: fill;
+        width: 100%;
+        height: 100%;
 
-      font-size: 8px;
-      padding-left: 4px;
-      overflow: hidden;
-      text-align: justify;
-      line-height: 13px;
-      font-weight: bold;
+        font-size: 8px;
+        padding-left: 4px;
+        overflow: hidden;
+        text-align: justify;
+        line-height: 13px;
+        font-weight: bold;
 
-      filter: drop-shadow(0 0 4px #3bffdacc);
-    }
+        filter: drop-shadow(0 0 4px #3bffdacc);
+      }
 
-    #dollarsigngreeblie {
-      display: flex;
-      justify-content: center; /* Horizontally centers content */
-      align-items: center; /* Vertically centers content */
+      #dollarsigngreeblie {
+        display: flex;
+        justify-content: center; /* Horizontally centers content */
+        align-items: center; /* Vertically centers content */
 
-      grid-area: dollarsigngreeblie;
-    }
+        grid-area: dollarsigngreeblie;
+      }
 
-    #inner-dollarsigngreeblie {
-      text-align: center;
-      vertical-align: center;
-      width: 40px;
-      height: 40px;
-      font-size: 36px;
-      border: 3px solid #3bffdacc;
-      border-radius: 50%;
-      filter: drop-shadow(0 0 4px #3bffdacc);
-    }
+      #inner-dollarsigngreeblie {
+        text-align: center;
+        vertical-align: center;
+        width: 40px;
+        height: 40px;
+        font-size: 36px;
+        border: 3px solid #3bffdacc;
+        border-radius: 50%;
+        filter: drop-shadow(0 0 4px #3bffdacc);
+      }
 
-    #r-progbar2 {
-      grid-area: r-progbar2;
-    }
+      #r-progbar2 {
+        grid-area: r-progbar2;
+      }
 
-    #ring {
-      /*TODO: Should parent to #mainframe*/
-      position: fixed;
-      left: auto;
-      /*TODO: This should be baked in better.*/
-      top: calc(50% - (564.8px / 2) - 20px);
-      width: 564.8px;
-      height: 564.8px;
-      transform-origin: center;
-      filter: url(#tint) drop-shadow(0 0 4px #3bffdacc);
-    }
-    #worldmap {
-      grid-area: worldmap;
+      #ring {
+        /*TODO: Should parent to #mainframe*/
+        position: fixed;
+        left: auto;
+        /*TODO: This should be baked in better.*/
+        top: calc(50% - (564.8px / 2) - 20px);
+        width: 564.8px;
+        height: 564.8px;
+        transform-origin: center;
+        filter: url(#tint) drop-shadow(0 0 4px #3bffdacc);
+      }
+      #worldmap {
+        grid-area: worldmap;
 
-      object-fit: fill;
-      width: 100%;
-      height: 100%;
+        object-fit: fill;
+        width: 100%;
+        height: 100%;
 
-      filter: url(#tint) drop-shadow(0 0 4px #3bffdacc);
-    }
-    #bl-graph {
+        filter: url(#tint) drop-shadow(0 0 4px #3bffdacc);
+      }
+      #bl-graph {
         grid-area: bl-graph;
 
         object-fit: fill;
         width: 100%;
         height: 100%;
-    }
-    #bcl-graph {
+      }
+      #bcl-graph {
         grid-area: bcl-graph;
 
         object-fit: fill;
         width: 100%;
         height: 100%;
-    }
-    #bcr-graph {
+      }
+      #bcr-graph {
         grid-area: bcr-graph;
 
         object-fit: fill;
         width: 100%;
         height: 100%;
-    }
+      }
 
-    #br-graph {
+      #br-graph {
         grid-area: br-graph;
 
         object-fit: fill;
         width: 100%;
         height: 100%;
-    }
-    #r-progbar {
+      }
+      #r-progbar {
         grid-area: r-progbar;
 
         object-fit: fill;
         width: 100%;
         height: 100%;
-    }
-    #br-percentages {
+      }
+      #br-percentages {
         grid-area: br-percentages;
         padding-left: 24px;
         line-height: 100%;
@@ -358,195 +360,316 @@
 
         display: flex;
         align-items: center;
-    }
-    #trace-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none; /* Crucial: Allows clicks to pass through */
-      z-index: 9998; /* Just below #gradient-overlay */
+      }
+      #trace-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none; /* Crucial: Allows clicks to pass through */
+        z-index: 9998; /* Just below #gradient-overlay */
 
-      /* TODO: Integrate this into the tint filter? */
-      filter: drop-shadow(0 0 4px #3bffdacc);
-    }
-    #gradient-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      opacity: 46.1351%;
-      z-index: 9999;
-      pointer-events: none;
-      width: 100vw;
-      height: 100vh;
-    }
+        /* TODO: Integrate this into the tint filter? */
+        filter: drop-shadow(0 0 4px #3bffdacc);
+      }
+      #gradient-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        opacity: 46.1351%;
+        z-index: 9999;
+        pointer-events: none;
+        width: 100vw;
+        height: 100vh;
+      }
 
-    #mockup {
-      position: fixed;
-      top: 0;
-      left:auto;
-      width: auto;
-      height: 100vh;
-      opacity: 1;
-      z-index: -999;
-      filter: url(#tint);
-    }
+      #mockup {
+        position: fixed;
+        top: 0;
+        left: auto;
+        width: auto;
+        height: 100vh;
+        opacity: 1;
+        z-index: -999;
+        filter: url(#tint);
+      }
 
-    .highlightable-element {
+      .highlightable-element {
         padding: 20px;
         margin: 20px;
         border: 1px solid #ccc;
-    }
+      }
 
-    .mock-progressbar {
-      height: calc(100% - 24px - 4px);
-      width: calc(100% - 24px);
-      border: 2px solid #3bffdacc;
-      margin: 12px;
-      margin-left: 0px;
-      filter: drop-shadow(0 0 4px #3bffdacc);
-    }
+      .mock-progressbar {
+        height: calc(100% - 24px - 4px);
+        width: calc(100% - 24px);
+        border: 2px solid #3bffdacc;
+        margin: 12px;
+        margin-left: 0px;
+        filter: drop-shadow(0 0 4px #3bffdacc);
+      }
 
-    .mock-progressbar > .bar {
-      width: 60%;
-      height: 100%;
-      background-color: #3bffdacc;
-    }
-  </style>
-</head>
-<body>
-  <svg width="0" height="0">
-    <filter id="tint" color-interpolation-filters="sRGB">
-      <!-- TODO: This probably needs a rework to produce the correct effect -->
-      <feColorMatrix id="tintMatrix" type="matrix" values=""/>
-      <feComponentTransfer>
-        <feFuncA type="identity"/>
-      </feComponentTransfer>
-    </filter>
-  </svg>
-  <div id="mainframe">
-    <!-- Left Column -->
-    <div id="tl-label"><div id="tl-label-line-greeblie">GREB</div>Dashboard</div>
-    <div id="leftbox">
-      <div id="barchart">
-        <div id="barchart-chart">CHART HERE</div>
-        <div id="barchart-line-greeblie">GREB</div>
+      .mock-progressbar > .bar {
+        width: 60%;
+        height: 100%;
+        background-color: #3bffdacc;
+      }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0">
+      <filter id="tint" color-interpolation-filters="sRGB">
+        <feColorMatrix id="tintMatrix" type="matrix" values="" />
+        <feComponentTransfer>
+          <feFuncA type="identity" />
+        </feComponentTransfer>
+      </filter>
+    </svg>
+    <div id="mainframe">
+      <div id="tl-label">
+        <div id="tl-label-line-greeblie">GREB</div>
+        Dashboard
       </div>
-      <img id="barchart-img" src="graph6_placeholder.svg" alt="Graph6 Placeholder" draggable="false">
-      <div id="lefttext">
-        Executing system log protocol 731-C. Local time 14:41:02. Active unit designation: Locus Alpha. Operational readiness: Green. All primary sub-systems nominal. Power core output at 98.4%, reserves holding steady. Data uplink synchronized. Atmospheric particulate density 12.7%, humidity 44%, barometric pressure 1012 millibars. External visual feeds show low-light conditions with significant atmospheric haze. Threat assessment probability elevated to 47.3% based on recent thermal anomalies and faint signal detection. System log entry: Targeting system reports biometrics scan inconclusive. Target signature identified as non-standard organic, classification pending. Proximity alert at 750 meters. System status: Active engagement protocol not initiated. Awaiting confirmation from central command. All local sensors are operating within established parameters. Bio-signs within the immediate zone are 0.0, outside of operational unit. Passive scan for additional hostiles continues on loop. Communication channel remains open, encrypted traffic detected on 1.4 GHz band, decryption progress: 4%. Visual feed [CAM-03] shows movement at a distance of 1.2 kilometers, classification unresolved, possibly non-threat wildlife. Main weapon systems are armed and in standby mode. Energy output for the personal field generator is stable at 99.8%. No internal system errors detected. Awaiting further instruction. Awaiting further instruction. Awaiting further instruction.
+      <div id="leftbox">
+        <div id="barchart">
+          <div id="barchart-chart">CHART HERE</div>
+          <div id="barchart-line-greeblie">GREB</div>
+        </div>
+        <img
+          id="barchart-img"
+          src="graph6_placeholder.svg"
+          alt="Graph6 Placeholder"
+          draggable="false"
+        />
+        <div id="lefttext">
+          Executing system log protocol 731-C. Local time 14:41:02. Active unit
+          designation: Locus Alpha. Operational readiness: Green. All primary
+          sub-systems nominal. Power core output at 98.4%, reserves holding
+          steady. Data uplink synchronized. Atmospheric particulate density
+          12.7%, humidity 44%, barometric pressure 1012 millibars. External
+          visual feeds show low-light conditions with significant atmospheric
+          haze. Threat assessment probability elevated to 47.3% based on recent
+          thermal anomalies and faint signal detection. System log entry:
+          Targeting system reports biometrics scan inconclusive. Target
+          signature identified as non-standard organic, classification pending.
+          Proximity alert at 750 meters. System status: Active engagement
+          protocol not initiated. Awaiting confirmation from central command.
+          All local sensors are operating within established parameters.
+          Bio-signs within the immediate zone are 0.0, outside of operational
+          unit. Passive scan for additional hostiles continues on loop.
+          Communication channel remains open, encrypted traffic detected on 1.4
+          GHz band, decryption progress: 4%. Visual feed [CAM-03] shows movement
+          at a distance of 1.2 kilometers, classification unresolved, possibly
+          non-threat wildlife. Main weapon systems are armed and in standby
+          mode. Energy output for the personal field generator is stable at
+          99.8%. No internal system errors detected. Awaiting further
+          instruction. Awaiting further instruction. Awaiting further
+          instruction.
+        </div>
+        <svg id="left-dot-greeblies" class="greeblie-dot-grid"></svg>
       </div>
-      <svg id="left-dot-greeblies" class="greeblie-dot-grid"></svg>
+      <img
+        id="worldmap"
+        src="world_map.svg"
+        alt="World Map"
+        draggable="false"
+      />
+      <img
+        id="bl-graph"
+        src="graph2_placeholder.svg"
+        alt="Graph2 Placeholder"
+        draggable="false"
+      />
+
+      <svg id="top-dot-greeblies" class="greeblie-dot-grid"></svg>
+
+      <img
+        id="bcl-graph"
+        src="graph3_placeholder.svg"
+        alt="Graph3 Placeholder"
+        draggable="false"
+      />
+      <svg id="bottom-dot-greeblies" class="greeblie-dot-grid"></svg>
+      <img
+        id="bcr-graph"
+        src="graph4_placeholder.svg"
+        alt="Graph4 Placeholder"
+        draggable="false"
+      />
+
+      <div id="statusbox">
+        <div id="statustitle">Status</div>
+        <div id="statustext">
+          Executing system log protocol 731-C. Local time 14:41:02. Active unit
+          designation: Locus Alpha. Operational readiness: Green. All primary
+          sub-systems nominal. Power core output at 98.4%, reserves holding
+          steady. Data uplink synchronized. Atmospheric particulate density
+          12.7%, humidity 44%, barometric pressure 1012 millibars. External
+          visual feeds show low-light conditions with significant atmospheric
+          haze. Threat assessment probability elevated to 47.3% based on recent
+          thermal anomalies and faint signal detection. System log entry:
+          Targeting system reports biometrics scan inconclusive. Target
+          signature identified as non-standard organic, classification pending.
+          Proximity alert at 750 meters. System status: Active engagement
+          protocol not initiated. Awaiting confirmation from central command.
+          All local sensors are operating within established parameters.
+          Bio-signs within the immediate zone are 0.0, outside of operational
+          unit. Passive scan for additional hostiles continues on loop.
+          Communication channel remains open, encrypted traffic detected on 1.4
+          GHz band, decryption progress: 4%. Visual feed [CAM-03] shows movement
+          at a distance of 1.2 kilometers, classification unresolved, possibly
+          non-threat wildlife. Main weapon systems are armed and in standby
+          mode. Energy output for the personal field generator is stable at
+          99.8%. No internal system errors detected. Awaiting further
+          instruction. Awaiting further instruction. Awaiting further
+          instruction.
+        </div>
+        <div id="status-line-greeblie">GREB</div>
+      </div>
+      <div id="rightbox">
+        <div id="righttext">
+          Executing system log protocol 731-C. Local time 14:41:02. Active unit
+          designation: Locus Alpha. Operational readiness: Green. All primary
+          sub-systems nominal. Power core output at 98.4%, reserves holding
+          steady. Data uplink synchronized. Atmospheric particulate density
+          12.7%, humidity 44%, barometric pressure 1012 millibars. External
+          visual feeds show low-light conditions with significant atmospheric
+          haze. Threat assessment probability elevated to 47.3% based on recent
+          thermal anomalies and faint signal detection. System log entry:
+          Targeting system reports biometrics scan inconclusive. Target
+          signature identified as non-standard organic, classification pending.
+          Proximity alert at 750 meters. System status: Active engagement
+          protocol not initiated. Awaiting confirmation from central command.
+          All local sensors are operating within established parameters.
+          Bio-signs within the immediate zone are 0.0, outside of operational
+          unit. Passive scan for additional hostiles continues on loop.
+          Communication channel remains open, encrypted traffic detected on 1.4
+          GHz band, decryption progress: 4%. Visual feed [CAM-03] shows movement
+          at a distance of 1.2 kilometers, classification unresolved, possibly
+          non-threat wildlife. Main weapon systems are armed and in standby
+          mode. Energy output for the personal field generator is stable at
+          99.8%. No internal system errors detected. Awaiting further
+          instruction. Awaiting further instruction. Awaiting further
+          instruction.
+        </div>
+        <div id="dollarsigngreeblie">
+          <div id="inner-dollarsigngreeblie">$</div>
+        </div>
+        <div id="r-progbar2">
+          <div class="mock-progressbar"><div class="bar"></div></div>
+        </div>
+        <svg id="right-dot-greeblies" class="greeblie-dot-grid"></svg>
+        <img
+          id="r-progbar"
+          src="graph5_placeholder.svg"
+          alt="Graph5 Placeholder"
+          draggable="false"
+        />
+        <img
+          id="br-graph"
+          src="graph1_placeholder.svg"
+          alt="Graph1 Placeholder"
+          draggable="false"
+        />
+        <div id="br-percentages">
+          60%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20%
+        </div>
+        <div id="br-line-greeblie">GREB</div>
+      </div>
     </div>
-    <img id="worldmap" src="world_map.svg" alt="World Map" draggable="false">
-    <img id="bl-graph" src="graph2_placeholder.svg" alt="Graph2 Placeholder" draggable="false">
 
-    <!-- Top Row -->
-    <svg id="top-dot-greeblies" class="greeblie-dot-grid"></svg>
+    <img
+      id="ring"
+      class="greeblie-shape-circle"
+      src="screensaver-ring.svg"
+      alt="Ring"
+      draggable="false"
+    />
 
-    <!-- Bottom Row -->
-    <img id="bcl-graph" src="graph3_placeholder.svg" alt="Graph3 Placeholder" draggable="false">
-    <svg id="bottom-dot-greeblies" class="greeblie-dot-grid"></svg>
-    <img id="bcr-graph" src="graph4_placeholder.svg" alt="Graph4 Placeholder" draggable="false">
+    <svg id="trace-overlay" xmlns="http://www.w3.org/2000/svg"></svg>
+    <img id="gradient-overlay" src="screensaver-overlay.svg" alt="Overlay" />
 
-    <!-- Right Column -->
+    <img id="mockup" src="screensaver-mockup.png" alt="Mockup" />
 
-    <div id="statusbox">
-      <div id="statustitle">Status</div>
-      <div id="statustext">
-        Executing system log protocol 731-C. Local time 14:41:02. Active unit designation: Locus Alpha. Operational readiness: Green. All primary sub-systems nominal. Power core output at 98.4%, reserves holding steady. Data uplink synchronized. Atmospheric particulate density 12.7%, humidity 44%, barometric pressure 1012 millibars. External visual feeds show low-light conditions with significant atmospheric haze. Threat assessment probability elevated to 47.3% based on recent thermal anomalies and faint signal detection. System log entry: Targeting system reports biometrics scan inconclusive. Target signature identified as non-standard organic, classification pending. Proximity alert at 750 meters. System status: Active engagement protocol not initiated. Awaiting confirmation from central command. All local sensors are operating within established parameters. Bio-signs within the immediate zone are 0.0, outside of operational unit. Passive scan for additional hostiles continues on loop. Communication channel remains open, encrypted traffic detected on 1.4 GHz band, decryption progress: 4%. Visual feed [CAM-03] shows movement at a distance of 1.2 kilometers, classification unresolved, possibly non-threat wildlife. Main weapon systems are armed and in standby mode. Energy output for the personal field generator is stable at 99.8%. No internal system errors detected. Awaiting further instruction. Awaiting further instruction. Awaiting further instruction.
-      </div>
-      <div id="status-line-greeblie">GREB</div>
-    </div>
-    <div id="rightbox">
-      <div id="righttext">
-        Executing system log protocol 731-C. Local time 14:41:02. Active unit designation: Locus Alpha. Operational readiness: Green. All primary sub-systems nominal. Power core output at 98.4%, reserves holding steady. Data uplink synchronized. Atmospheric particulate density 12.7%, humidity 44%, barometric pressure 1012 millibars. External visual feeds show low-light conditions with significant atmospheric haze. Threat assessment probability elevated to 47.3% based on recent thermal anomalies and faint signal detection. System log entry: Targeting system reports biometrics scan inconclusive. Target signature identified as non-standard organic, classification pending. Proximity alert at 750 meters. System status: Active engagement protocol not initiated. Awaiting confirmation from central command. All local sensors are operating within established parameters. Bio-signs within the immediate zone are 0.0, outside of operational unit. Passive scan for additional hostiles continues on loop. Communication channel remains open, encrypted traffic detected on 1.4 GHz band, decryption progress: 4%. Visual feed [CAM-03] shows movement at a distance of 1.2 kilometers, classification unresolved, possibly non-threat wildlife. Main weapon systems are armed and in standby mode. Energy output for the personal field generator is stable at 99.8%. No internal system errors detected. Awaiting further instruction. Awaiting further instruction. Awaiting further instruction.
-      </div>
-      <div id="dollarsigngreeblie"><div id="inner-dollarsigngreeblie">$</div></div>
-      <div id="r-progbar2">
-        <div class=mock-progressbar><div class=bar></div></div>
-      </div>
-      <svg id="right-dot-greeblies" class="greeblie-dot-grid"></svg>
-      <img id="r-progbar" src="graph5_placeholder.svg" alt="Graph5 Placeholder" draggable="false">
-      <img id="br-graph" src="graph1_placeholder.svg" alt="Graph1 Placeholder" draggable="false">
-      <div id=br-percentages>60%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20%</div>
-      <div id="br-line-greeblie">GREB</div>
-    </div>
-  </div>
+    <script>
+      function hexToRgb(hex) {
+        hex = hex.replace(/^#/, '');
+        if (hex.length === 3)
+          hex = hex
+            .split('')
+            .map((c) => c + c)
+            .join('');
+        const num = parseInt(hex, 16);
+        return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
+      }
 
-  <!-- TODO: Integrate inside mainframe? Dynamic resizing? -->
-  <img id="ring" class="greeblie-shape-circle" src="screensaver-ring.svg" alt="Ring" draggable="false">
+      function setTintColor(hex) {
+        const { r, g, b } = hexToRgb(hex);
+        const rf = (r / 255).toFixed(3);
+        const gf = (g / 255).toFixed(3);
+        const bf = (b / 255).toFixed(3);
 
-  <svg id="trace-overlay" xmlns="http://www.w3.org/2000/svg"></svg>
-  <img id="gradient-overlay" src="screensaver-overlay.svg" alt="Overlay">
+        const lumR = 0.2126;
+        const lumG = 0.7152;
+        const lumB = 0.0722;
 
-  <script>
-    function hexToRgb(hex) {
-      hex = hex.replace(/^#/, "");
-      if (hex.length === 3) hex = hex.split("").map(c => c + c).join("");
-      const num = parseInt(hex, 16);
-      return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
-    }
+        // The color matrix to convert to greyscale and tint
+        // TODO: This... doesn't really work. Might need to do this with two
+        const values = `
+      ${(lumR * rf).toFixed(3)} ${(lumG * rf).toFixed(3)} ${(lumB * rf).toFixed(3)} 0 0
+      ${(lumR * gf).toFixed(3)} ${(lumG * gf).toFixed(3)} ${(lumB * gf).toFixed(3)} 0 0
+      ${(lumR * bf).toFixed(3)} ${(lumG * bf).toFixed(3)} ${(lumB * bf).toFixed(3)} 0 0
+      0 0 0 1 0
+    `
+          .trim()
+          .replace(/\s+/g, ' ');
 
-    function setTintColor(hex) {
-      const { r, g, b } = hexToRgb(hex);
-      const rf = (r / 255).toFixed(3);
-      const gf = (g / 255).toFixed(3);
-      const bf = (b / 255).toFixed(3);
+        document.getElementById('tintMatrix').setAttribute('values', values);
+      }
 
-      const lumR = 0.2126;
-      const lumG = 0.7152;
-      const lumB = 0.0722;
+      setTintColor('#3bffda');
+    </script>
 
-      // The color matrix to convert to greyscale and tint
-      // TODO: This... doesn't really work. Might need to do this with two
-      const values = `
-        ${(lumR * rf).toFixed(3)} ${(lumG * rf).toFixed(3)} ${(lumB * rf).toFixed(3)} 0 0
-        ${(lumR * gf).toFixed(3)} ${(lumG * gf).toFixed(3)} ${(lumB * gf).toFixed(3)} 0 0
-        ${(lumR * bf).toFixed(3)} ${(lumG * bf).toFixed(3)} ${(lumB * bf).toFixed(3)} 0 0
-        0 0 0 1 0
-      `.trim().replace(/\s+/g, " ");
+    <script>
+      // TODO: When this is running, flickering artifacts show up.
+      // I suspect it's not specifically this, more to do with svg compositing
+      // But still it's annoying.
+      const ring = document.getElementById('ring');
+      let start = null;
 
-      document.getElementById("tintMatrix").setAttribute("values", values);
-    }
+      function animate(timestamp) {
+        if (!start) start = timestamp;
+        const elapsed = (timestamp - start) / 1000; // seconds
 
-    setTintColor("#3bffda");
-  </script>
+        // t = time in radians (adjust speed here with factor)
+        const t = (elapsed * 2 * Math.PI) / 5; // one base cycle ~5s
 
-  <script>
-    // TODO: When this is running, flickering artifacts show up.
-    // I suspect it's not specifically this, more to do with svg compositing
-    // But still it's annoying.
-    const ring = document.getElementById("ring");
-    let start = null;
+        // rotation in degrees using your formula
+        const angle = 15 * Math.sin(t) + 15 * Math.sin(t / Math.PI);
 
-    function animate(timestamp) {
-      if (!start) start = timestamp;
-      const elapsed = (timestamp - start) / 1000; // seconds
+        ring.style.transform = `rotate(${angle}deg)`;
 
-      // t = time in radians (adjust speed here with factor)
-      const t = elapsed * 2 * Math.PI / 5; // one base cycle ~5s
-
-      // rotation in degrees using your formula
-      const angle = 15 * Math.sin(t) + 15 * Math.sin(t / Math.PI);
-
-      ring.style.transform = `rotate(${angle}deg)`;
+        requestAnimationFrame(animate);
+      }
 
       requestAnimationFrame(animate);
-    }
+    </script>
 
-    requestAnimationFrame(animate);
-  </script>
+    <script type="module">
+      import { addTrace, clearAllTraces } from './traces.js';
 
-  <script type="module">
-  import { addTrace, clearAllTraces } from './traces.js';
+      clearAllTraces();
 
-  clearAllTraces();
-
-  addTrace('O #mainframe.clip(8)', 'foo1',  { color: '#3bffda', strokeWidth: 3 });
-  addTrace('O #mainframe.offset(24).clip(20)', 'foo2', { color: '#3bffda', strokeWidth: 3 });
-  /*addTrace(`
+      addTrace('O #mainframe.clip(8)', 'foo1', {
+        color: '#3bffda',
+        strokeWidth: 3,
+      });
+      addTrace('O #mainframe.offset(24).clip(20)', 'foo2', {
+        color: '#3bffda',
+        strokeWidth: 3,
+      });
+      /*addTrace(`
     M #mainframe.tr
     L #mainframe.tl.clip(20)
     L #mainframe.bl.clip(4)
@@ -557,56 +680,87 @@
     { color: '#ff0000', strokeWidth: 1 }
   )*/
 
-  addTrace('O #bl-graph.clip(20)', 'foo3',  { color: '#3bffda', strokeWidth: 2 });
-  // TODO: The last command is brittle. Should be H #right.rightside once that's supported
-  addTrace(`
+      addTrace('O #bl-graph.clip(20)', 'foo3', {
+        color: '#3bffda',
+        strokeWidth: 2,
+      });
+      // TODO: The last command is brittle. Should be H #right.rightside once that's supported
+      addTrace(
+        `
     M #br-graph.tl.offsety(8)
     L #br-graph.bl.clip(4)
     L #br-graph.br.clip(4)
     L #br-graph.tr.clip(8)
     L #br-graph.tl.offsetx(-45)
-  `, 'foo4',  { color: '#3bffda', strokeWidth: 2 });
+  `,
+        'foo4',
+        { color: '#3bffda', strokeWidth: 2 }
+      );
 
-  // TODO: Last two commands are brittle should H #ring.leftside.
-  addTrace(`
+      // TODO: Last two commands are brittle should H #ring.leftside.
+      addTrace(
+        `
     O #bcl-graph.clip(4)
     M #bcl-graph.tr.offsety(-20).offsetx(-47).offsetx(-8)
     L #bcl-graph.tl.offsety(-20)
     M #bcl-graph.tr.offsety(-40).offsetx(-70).offsetx(-8)
     L #bcl-graph.tl.offsety(-40)
-    `, 'foo5',  { color: '#3bffda', strokeWidth: 2 });
+    `,
+        'foo5',
+        { color: '#3bffda', strokeWidth: 2 }
+      );
 
-  addTrace(`
+      addTrace(
+        `
     M #bottom-dot-greeblies.tl.offsety(-10)
     L #bottom-dot-greeblies.tr.offsety(-10)
-    `, 'bottomlinetrace',  { color: '#3bffda', strokeWidth: 2 });
+    `,
+        'bottomlinetrace',
+        { color: '#3bffda', strokeWidth: 2 }
+      );
 
-    // TODO: Use V #ring.topside
-    addTrace(`
+      // TODO: Use V #ring.topside
+      addTrace(
+        `
     M #top-dot-greeblies.tr.offsetx(10).offsety(5)
     L #top-dot-greeblies.br.offsetx(10).offsety(40)
-    `, 'topdotlinetrace',  { color: '#3bffda', strokeWidth: 2 });
+    `,
+        'topdotlinetrace',
+        { color: '#3bffda', strokeWidth: 2 }
+      );
 
-    // TODO: Last two commands are brittle should H #ring.rightside.
-    addTrace(`
+      // TODO: Last two commands are brittle should H #ring.rightside.
+      addTrace(
+        `
     O #bcr-graph.clip(4)
     M #bcr-graph.tr.offsety(-20)
     L #bcr-graph.tl.offsety(-20).offsetx(15).offsetx(8)
     M #bcr-graph.tr.offsety(-40)
     L #bcr-graph.tl.offsety(-40).offsetx(40).offsetx(8)
-    `, 'foo6',  { color: '#3bffda', strokeWidth: 2 });
+    `,
+        'foo6',
+        { color: '#3bffda', strokeWidth: 2 }
+      );
 
-  // TODO: The first and last commands should really be referenced to #ring once supported.
-  addTrace(`
+      // TODO: The first and last commands should really be referenced to #ring once supported.
+      addTrace(
+        `
     M #worldmap.tr.offsetx(-10)
     L #worldmap.tl.clip(8)
     L #worldmap.bl.clip(8)
     L #worldmap.br.offsetx(25)
-    `, 'foo7',  { color: '#3bffda', strokeWidth: 2 });
-  addTrace('O #dollarsigngreeblie.clip(4)', 'foo8',  { color: '#3bffda', strokeWidth: 2 });
+    `,
+        'foo7',
+        { color: '#3bffda', strokeWidth: 2 }
+      );
+      addTrace('O #dollarsigngreeblie.clip(4)', 'foo8', {
+        color: '#3bffda',
+        strokeWidth: 2,
+      });
 
-  // TODO: USE An anon point for the corner of the second path.
-  addTrace(`
+      // TODO: USE An anon point for the corner of the second path.
+      addTrace(
+        `
     M #r-progbar2.bl
     L #r-progbar2.br.clip(4)
     L #r-progbar2.tr.clip(4)
@@ -615,12 +769,16 @@
     L #r-progbar2.tl.offsetx(-20)
     L #r-progbar2.bl.offsetx(-20).offsety(30)
     L #ring.rightside.offsetx(-6)
-    `, 'foo9',  { color: '#3bffda', strokeWidth: 2 });
+    `,
+        'foo9',
+        { color: '#3bffda', strokeWidth: 2 }
+      );
 
-  // TODO: r-progbar is really awkwardly sized, we should use padding and margin more?
-  // TODO: We should really use at(%) for the first command (also the fade out?)
-  // TODO: We should really use H #ring.rightside for the last command
-  addTrace(`
+      // TODO: r-progbar is really awkwardly sized, we should use padding and margin more?
+      // TODO: We should really use at(%) for the first command (also the fade out?)
+      // TODO: We should really use H #ring.rightside for the last command
+      addTrace(
+        `
     M #r-progbar.tr.offsety(30).offsetx(-70)
     L #r-progbar.tl.offsety(30).clip(20)
     L #r-progbar.bl.offsety(-20)
@@ -628,18 +786,26 @@
     L #r-progbar.tr.offsety(15)
     L #r-progbar.tl.offsety(15).offsetx(-30).clip(40)
     L #r-progbar.tl.offsety(55).offsetx(-30).offsetx(-20)
-    `, 'foo10',  { color: '#3bffda', strokeWidth: 2 });
+    `,
+        'foo10',
+        { color: '#3bffda', strokeWidth: 2 }
+      );
 
-  // TODO: Use of offsetx here is not responsive. Should use H #ring somehow.
-  addTrace(`
+      // TODO: Use of offsetx here is not responsive. Should use H #ring somehow.
+      addTrace(
+        `
     M #righttext.tr
     L #righttext.tl.offsetx(-95).clip(10)
     M #righttext.tl
     L #righttext.bl
     L #righttext.br
-    `, 'foo11',  { color: '#3bffda', strokeWidth: 2 });
+    `,
+        'foo11',
+        { color: '#3bffda', strokeWidth: 2 }
+      );
 
-  addTrace(`
+      addTrace(
+        `
     M #statusbox.tr.offsetx(-45)
     L #statusbox.tr
     L #statusbox.br
@@ -650,11 +816,15 @@
     L #statusbox.topside.offsetx(30).offsety(16).offsetx(4)
     L #statusbox.topside.offsetx(30).offsety(8).offsetx(-4)
     L #statusbox.tl.offsetx(25).offsety(8)
-    `, 'foo12',  { color: '#3bffda', strokeWidth: 2 });
+    `,
+        'foo12',
+        { color: '#3bffda', strokeWidth: 2 }
+      );
 
-    // TODO: Should really using H #ring.rightside at the end.
-    // TODO: Maybe use the dot greeblies to define the corner in a responsive way?
-    addTrace(`
+      // TODO: Should really using H #ring.rightside at the end.
+      // TODO: Maybe use the dot greeblies to define the corner in a responsive way?
+      addTrace(
+        `
     M #lefttext.rightside
     L #lefttext.rightside.offsetx(20)
     L #lefttext.tr.offsetx(20)
@@ -670,33 +840,39 @@
 
     M #barchart.rightside.offsety(-50).offsetx(65)
     L #barchart.rightside.offsety(-50).offsetx(200)
-    `, 'foo13',  { color: '#3bffda', strokeWidth: 2 });
+    `,
+        'foo13',
+        { color: '#3bffda', strokeWidth: 2 }
+      );
 
-
-    addTrace(`
+      addTrace(
+        `
     M #barchart.tr.offsetx(-30)
     L #barchart.tr
     L #barchart.tr.offsety(40)
     M #barchart.bl
     L #barchart.br.offsetx(-40)
-    `, 'foo14',  { color: '#3bffda', strokeWidth: 2 });
-  </script>
+    `,
+        'foo14',
+        { color: '#3bffda', strokeWidth: 2 }
+      );
+    </script>
 
     <script type="module">
-        // TODO: Keep these updated as layouts shift.
-        import { drawDotGrid } from './dot_greeblies.js';
+      // TODO: Keep these updated as layouts shift.
+      import { drawDotGrid } from './dot_greeblies.js';
 
-        document.addEventListener("DOMContentLoaded", () => {
-            const dotGridSVGs = document.querySelectorAll(".greeblie-dot-grid");
+      document.addEventListener('DOMContentLoaded', () => {
+        const dotGridSVGs = document.querySelectorAll('.greeblie-dot-grid');
 
-            // Loop through each SVG and draw its grid
-            dotGridSVGs.forEach(drawDotGrid);
+        // Loop through each SVG and draw its grid
+        dotGridSVGs.forEach(drawDotGrid);
 
-            // Listen for window resize events and redraw all grids
-            window.addEventListener('resize', () => {
-                dotGridSVGs.forEach(drawDotGrid);
-            });
+        // Listen for window resize events and redraw all grids
+        window.addEventListener('resize', () => {
+          dotGridSVGs.forEach(drawDotGrid);
         });
+      });
     </script>
-</body>
+  </body>
 </html>
