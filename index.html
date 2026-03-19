@@ -44,23 +44,17 @@
         "bl-graph bcl-graph          bottom-dot-greeblies bcr-graph bcr-graph rightbox";
     }
 
-    #statusbox {
-      grid-area: statusbox;
-
-      object-fit: fill;
-      width: 100%;
-      height: 100%;
-    }
-
     #tl-label {
         grid-area: tl-label;
         padding: 0;
-        padding-left: 70px;
         font-size: 16px;
         margin: 0;
         overflow: hidden;
         line-height: 24px;
         font-weight: bold;
+
+        display: flex;
+        align-items: center;
     }
 
     #top-dot-greeblies {
@@ -111,12 +105,37 @@
         filter: drop-shadow(0 0 4px #3bffdacc);
     }
 
-    #barchart {
+    #barchart-img {
       grid-area: barchart;
+
+      margin-top: 8px;
+      margin-bottom: 8px;
 
       object-fit: fill;
       height: 100%;
       width: 100%;
+    }
+
+    #barchart {
+        grid-area: barchart;
+        margin-top: 8px;
+        margin-bottom: 8px;
+        object-fit: fill;
+        height: 100%;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 60px;
+        grid-template-rows: 1fr;
+        grid-column-gap: 8px;
+        grid-row-gap: 16px;
+        grid-template-areas: "barchart-chart barchart-line-greeblie";
+    }
+
+    #barchart-line-greeblie {
+        grid-area: barchart-line-greeblie;
+        background-color: #0000ff66;
+        object-fit: fill;
+        margin: 12px 10px;
     }
 
     #lefttext {
@@ -165,7 +184,7 @@
         margin: 0;
         padding: 0;
         margin-top: -16px;
-        padding-right: 8px;
+        padding-right: 16px;
         display: grid;
         grid-template-columns: 1fr 20px 24px;
         grid-template-rows: 80px 1fr;
@@ -174,6 +193,64 @@
         grid-template-areas:
           "barchart barchart ."
           "lefttext .        left-dot-greeblies";
+    }
+
+    #statusbox {
+      padding: 20px;
+      padding-bottom: 10px;
+      grid-area: statusbox;
+      object-fit: fill;
+      width: calc(100% - 40px);
+      height: calc(100% -30px);
+      display: grid;
+      grid-template-columns: 1fr 80px;
+      grid-template-rows: 24px 1fr;
+      grid-column-gap: 4px;
+      grid-row-gap: 4px;
+      grid-template-areas:
+        "statustitle statustitle"
+        "statustext status-line-greeblie";
+    }
+
+    #statustitle {
+        grid-area: statustitle;
+        font-weight: bold;
+        font-size: 19px;
+    }
+
+    #statustext {
+        grid-area: statustext;
+        overflow: hidden;
+        font-size: 10px;
+    }
+
+    #status-line-greeblie {
+        grid-area: status-line-greeblie;
+        background-color: #0000ff66;
+        margin-top: -16px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    #tl-label-line-greeblie {
+      background-color: #0000ff66;
+      display: inline-block;
+      height:12px;
+      width: 54px;
+
+      margin: auto 8px;
+
+      font-size: 10px;
+      line-height: 10px;
+    }
+
+    #br-line-greeblie {
+      grid-area: br-line-greeblie;
+      background-color: #0000ff66;
+
+      object-fit: fill;
+      width: 100%;
+      height: 100%;
     }
 
     #righttext {
@@ -194,7 +271,22 @@
     }
 
     #dollarsigngreeblie {
+      display: flex;
+      justify-content: center; /* Horizontally centers content */
+      align-items: center; /* Vertically centers content */
+
       grid-area: dollarsigngreeblie;
+    }
+
+    #inner-dollarsigngreeblie {
+      text-align: center;
+      vertical-align: center;
+      width: 40px;
+      height: 40px;
+      font-size: 36px;
+      border: 3px solid #3bffdacc;
+      border-radius: 50%;
+      filter: drop-shadow(0 0 4px #3bffdacc);
     }
 
     #r-progbar2 {
@@ -261,9 +353,11 @@
         grid-area: br-percentages;
         padding-left: 24px;
         line-height: 100%;
-        /* background-color: #ff000066; */
         font-size: 24px;
         filter: drop-shadow(0 0 4px #3bffdacc);
+
+        display: flex;
+        align-items: center;
     }
     #trace-overlay {
       position: fixed;
@@ -304,6 +398,21 @@
         margin: 20px;
         border: 1px solid #ccc;
     }
+
+    .mock-progressbar {
+      height: calc(100% - 24px - 4px);
+      width: calc(100% - 24px);
+      border: 2px solid #3bffdacc;
+      margin: 12px;
+      margin-left: 0px;
+      filter: drop-shadow(0 0 4px #3bffdacc);
+    }
+
+    .mock-progressbar > .bar {
+      width: 60%;
+      height: 100%;
+      background-color: #3bffdacc;
+    }
   </style>
 </head>
 <body>
@@ -318,9 +427,13 @@
   </svg>
   <div id="mainframe">
     <!-- Left Column -->
-    <div id="tl-label">Dashboard</div>
+    <div id="tl-label"><div id="tl-label-line-greeblie">GREB</div>Dashboard</div>
     <div id="leftbox">
-      <img id="barchart" src="graph6_placeholder.svg" alt="Graph6 Placeholder" draggable="false">
+      <div id="barchart">
+        <div id="barchart-chart">CHART HERE</div>
+        <div id="barchart-line-greeblie">GREB</div>
+      </div>
+      <img id="barchart-img" src="graph6_placeholder.svg" alt="Graph6 Placeholder" draggable="false">
       <div id="lefttext">
         Executing system log protocol 731-C. Local time 14:41:02. Active unit designation: Locus Alpha. Operational readiness: Green. All primary sub-systems nominal. Power core output at 98.4%, reserves holding steady. Data uplink synchronized. Atmospheric particulate density 12.7%, humidity 44%, barometric pressure 1012 millibars. External visual feeds show low-light conditions with significant atmospheric haze. Threat assessment probability elevated to 47.3% based on recent thermal anomalies and faint signal detection. System log entry: Targeting system reports biometrics scan inconclusive. Target signature identified as non-standard organic, classification pending. Proximity alert at 750 meters. System status: Active engagement protocol not initiated. Awaiting confirmation from central command. All local sensors are operating within established parameters. Bio-signs within the immediate zone are 0.0, outside of operational unit. Passive scan for additional hostiles continues on loop. Communication channel remains open, encrypted traffic detected on 1.4 GHz band, decryption progress: 4%. Visual feed [CAM-03] shows movement at a distance of 1.2 kilometers, classification unresolved, possibly non-threat wildlife. Main weapon systems are armed and in standby mode. Energy output for the personal field generator is stable at 99.8%. No internal system errors detected. Awaiting further instruction. Awaiting further instruction. Awaiting further instruction.
       </div>
@@ -339,17 +452,26 @@
 
     <!-- Right Column -->
 
-    <img id="statusbox" src="graph7_placeholder.svg" alt="Graph7 Placeholder" draggable="false">
+    <div id="statusbox">
+      <div id="statustitle">Status</div>
+      <div id="statustext">
+        Executing system log protocol 731-C. Local time 14:41:02. Active unit designation: Locus Alpha. Operational readiness: Green. All primary sub-systems nominal. Power core output at 98.4%, reserves holding steady. Data uplink synchronized. Atmospheric particulate density 12.7%, humidity 44%, barometric pressure 1012 millibars. External visual feeds show low-light conditions with significant atmospheric haze. Threat assessment probability elevated to 47.3% based on recent thermal anomalies and faint signal detection. System log entry: Targeting system reports biometrics scan inconclusive. Target signature identified as non-standard organic, classification pending. Proximity alert at 750 meters. System status: Active engagement protocol not initiated. Awaiting confirmation from central command. All local sensors are operating within established parameters. Bio-signs within the immediate zone are 0.0, outside of operational unit. Passive scan for additional hostiles continues on loop. Communication channel remains open, encrypted traffic detected on 1.4 GHz band, decryption progress: 4%. Visual feed [CAM-03] shows movement at a distance of 1.2 kilometers, classification unresolved, possibly non-threat wildlife. Main weapon systems are armed and in standby mode. Energy output for the personal field generator is stable at 99.8%. No internal system errors detected. Awaiting further instruction. Awaiting further instruction. Awaiting further instruction.
+      </div>
+      <div id="status-line-greeblie">GREB</div>
+    </div>
     <div id="rightbox">
       <div id="righttext">
         Executing system log protocol 731-C. Local time 14:41:02. Active unit designation: Locus Alpha. Operational readiness: Green. All primary sub-systems nominal. Power core output at 98.4%, reserves holding steady. Data uplink synchronized. Atmospheric particulate density 12.7%, humidity 44%, barometric pressure 1012 millibars. External visual feeds show low-light conditions with significant atmospheric haze. Threat assessment probability elevated to 47.3% based on recent thermal anomalies and faint signal detection. System log entry: Targeting system reports biometrics scan inconclusive. Target signature identified as non-standard organic, classification pending. Proximity alert at 750 meters. System status: Active engagement protocol not initiated. Awaiting confirmation from central command. All local sensors are operating within established parameters. Bio-signs within the immediate zone are 0.0, outside of operational unit. Passive scan for additional hostiles continues on loop. Communication channel remains open, encrypted traffic detected on 1.4 GHz band, decryption progress: 4%. Visual feed [CAM-03] shows movement at a distance of 1.2 kilometers, classification unresolved, possibly non-threat wildlife. Main weapon systems are armed and in standby mode. Energy output for the personal field generator is stable at 99.8%. No internal system errors detected. Awaiting further instruction. Awaiting further instruction. Awaiting further instruction.
       </div>
-      <div id="dollarsigngreeblie"></div>
-      <div id="r-progbar2"></div>
+      <div id="dollarsigngreeblie"><div id="inner-dollarsigngreeblie">$</div></div>
+      <div id="r-progbar2">
+        <div class=mock-progressbar><div class=bar></div></div>
+      </div>
       <svg id="right-dot-greeblies" class="greeblie-dot-grid"></svg>
       <img id="r-progbar" src="graph5_placeholder.svg" alt="Graph5 Placeholder" draggable="false">
       <img id="br-graph" src="graph1_placeholder.svg" alt="Graph1 Placeholder" draggable="false">
       <div id=br-percentages>60%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20%</div>
+      <div id="br-line-greeblie">GREB</div>
     </div>
   </div>
 
@@ -358,8 +480,6 @@
 
   <svg id="trace-overlay" xmlns="http://www.w3.org/2000/svg"></svg>
   <img id="gradient-overlay" src="screensaver-overlay.svg" alt="Overlay">
-
-  <img id="mockup" src="screensaver-mockup.png" alt="Mockup">
 
   <script>
     function hexToRgb(hex) {
@@ -491,7 +611,8 @@
     L #r-progbar2.br.clip(4)
     L #r-progbar2.tr.clip(4)
     L #r-progbar2.tl
-    M #r-progbar2.tl.offsetx(-20)
+    M #righttext.leftside.offsetx(-20)
+    L #r-progbar2.tl.offsetx(-20)
     L #r-progbar2.bl.offsetx(-20).offsety(30)
     L #ring.rightside.offsetx(-6)
     `, 'foo9',  { color: '#3bffda', strokeWidth: 2 });
@@ -539,17 +660,26 @@
     L #lefttext.tr.offsetx(20)
     L #barchart.br.offsetx(35).offsety(-10)
     L #barchart.rightside.offsetx(35)
-    L #barchart.rightside.offsetx(160)
+    L #barchart.rightside.offsetx(170)
 
     M #lefttext.br
-    L #lefttext.br.offsetx(60)
+    L #lefttext.br.offsetx(80)
 
     M #barchart.rightside.offsety(-25).offsetx(65)
-    L #barchart.rightside.offsety(-25).offsetx(190)
+    L #barchart.rightside.offsety(-25).offsetx(200)
 
     M #barchart.rightside.offsety(-50).offsetx(65)
-    L #barchart.rightside.offsety(-50).offsetx(190)
+    L #barchart.rightside.offsety(-50).offsetx(200)
     `, 'foo13',  { color: '#3bffda', strokeWidth: 2 });
+
+
+    addTrace(`
+    M #barchart.tr.offsetx(-30)
+    L #barchart.tr
+    L #barchart.tr.offsety(40)
+    M #barchart.bl
+    L #barchart.br.offsetx(-40)
+    `, 'foo14',  { color: '#3bffda', strokeWidth: 2 });
   </script>
 
     <script type="module">
